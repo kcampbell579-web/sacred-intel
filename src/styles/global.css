@@ -73,12 +73,12 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.12;letter-s
 
 /* header */
 .site-header{position:sticky;top:0;z-index:50;background:rgba(11,11,13,.9);backdrop-filter:saturate(150%) blur(12px);border-bottom:1px solid var(--d-line);color:var(--d-text)}
-.header-inner,.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;height:66px}
-.nav.wrap{max-width:var(--maxw)}
-.brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none;font-family:var(--display);font-weight:600;font-size:1.2rem}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;height:66px}
+.brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none;font-family:var(--display);font-weight:600;font-size:1.2rem;white-space:nowrap}
 .brand:hover{color:#fff}
-.brand img{width:30px;height:30px}
-.brand small{display:block;font-family:var(--mono);font-size:.52rem;letter-spacing:.22em;color:var(--purple-2);text-transform:uppercase;font-weight:400;margin-top:3px}
+.brand img,.brand svg{width:30px;height:30px;flex:none}
+.brand small{display:block;font-family:var(--mono);font-size:.52rem;letter-spacing:.22em;color:var(--purple-2);text-transform:uppercase;font-weight:400;margin-top:3px;white-space:nowrap}
+@media(max-width:420px){.brand small{display:none}}
 .nav-links{display:flex;align-items:center;gap:2px}
 .nav-links a{color:var(--d-text-2);font-size:.9rem;font-weight:500;padding:8px 11px;border-radius:6px;text-decoration:none}
 .nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(255,255,255,.07)}

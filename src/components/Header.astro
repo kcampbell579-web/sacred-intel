@@ -5,16 +5,12 @@ const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href))
 ---
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="brand" href="/">
-      <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
-        <defs><linearGradient id="hm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A78BFA"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs>
-        <rect width="100" height="100" rx="24" fill="#141418"/>
-        <g fill="url(#hm)"><rect x="30" y="44" width="6" height="12" rx="3"/><rect x="41" y="34" width="6" height="32" rx="3"/><rect x="52" y="26" width="6" height="48" rx="3"/><rect x="63" y="38" width="6" height="24" rx="3"/></g>
-      </svg>
-      <span>Sacred Intel<small>Safety · Science · Failure</small></span>
+    <a class="brand" href="/" aria-label="Sacred Intel home">
+      <img src="/favicon.svg" alt="" width="30" height="30" />
+      <span class="bt">Sacred Intel<small>Safety · Science · Failure</small></span>
     </a>
 
-    <nav class="nav" aria-label="Primary">
+    <nav class="nav-links" aria-label="Primary">
       <a href="/episodes/" class={isActive('/episodes') ? 'active' : ''}>Episodes</a>
       <div class="nav-drop">
         <button type="button" aria-haspopup="true">Series
@@ -22,7 +18,7 @@ const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href))
         </button>
         <div class="menu">
           {seriesList.map((s) => (
-            <a href={`/series/${s.slug}/`}>{s.name}<span>{s.blurb.split('—')[0].trim().slice(0, 60)}</span></a>
+            <a href={`/series/${s.slug}/`}>{s.name}</a>
           ))}
         </div>
       </div>
@@ -32,9 +28,9 @@ const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href))
       <a href="/contact/" class={isActive('/contact') ? 'active' : ''}>Contact</a>
     </nav>
 
-    <div class="header-cta">
-      <a href="/episodes/" class="btn btn-ghost btn-sm">Browse</a>
-      <a href="#subscribe" class="btn btn-primary btn-sm">Subscribe</a>
+    <div class="nav-cta">
+      <a href="/episodes/" class="btn btn-ghost btn-sm hide-sm">Browse</a>
+      <a href="/contact/" class="btn btn-primary btn-sm hide-sm">Subscribe</a>
       <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
@@ -50,7 +46,6 @@ const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href))
     <a href="/about/">About Sacred Intel</a>
     <a href="/guests/">Guests / Become a Guest</a>
     <a href="/contact/">Contact</a>
-    <a href="#subscribe">Subscribe to the podcast</a>
   </div>
 </header>
 
