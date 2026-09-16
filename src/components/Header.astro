@@ -23,6 +23,7 @@ const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href))
         </div>
       </div>
       <a href="/articles/" class={isActive('/articles') ? 'active' : ''}>Articles</a>
+      <a href="/lookup/" class={isActive('/lookup') ? 'active' : ''}>Check Your Area</a>
       <a href="/about/" class={isActive('/about') ? 'active' : ''}>About</a>
       <a href="/guests/" class={isActive('/guests') ? 'active' : ''}>Guests</a>
       <a href="/contact/" class={isActive('/contact') ? 'active' : ''}>Contact</a>
@@ -42,6 +43,7 @@ const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href))
     <div class="grp">Series</div>
     {seriesList.map((s) => <a href={`/series/${s.slug}/`}>{s.name}</a>)}
     <div class="grp">More</div>
+    <a href="/lookup/">Check Your Area</a>
     <a href="/articles/">Articles / Intel</a>
     <a href="/about/">About Sacred Intel</a>
     <a href="/guests/">Guests / Become a Guest</a>

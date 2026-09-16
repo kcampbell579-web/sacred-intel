@@ -1,0 +1,167 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Check Your Area"
+  description="Enter your ZIP code for live local air quality and direct links to official contamination records — drinking water, Superfund sites, and facility violations near you."
+>
+  <section class="page-hero">
+    <div class="wrap page-hero-inner">
+      <span class="eyebrow">Check Your Area</span>
+      <h1>What&rsquo;s in your air and water?</h1>
+      <p>Enter your ZIP code for live local air quality, plus direct links to the official contamination records for where you live.</p>
+      <form id="zipForm" class="zipbar" novalidate>
+        <input id="zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code"
+               pattern="[0-9]{5}" maxlength="5" placeholder="e.g. 11801" aria-label="ZIP code" required />
+        <button type="submit" class="btn btn-primary btn-lg">Check my area</button>
+      </form>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div id="results" hidden></div>
+
+      <div id="intro" class="intro">
+        <div class="section-head"><span class="eyebrow">How this works</span><h2>Public records, one search</h2>
+          <p>Sacred Intel doesn&rsquo;t store your ZIP or track you. We pull live air-quality readings for your location and point you straight at the government databases that publish contamination notices.</p>
+        </div>
+        <div class="grid grid-2 srcgrid" id="genericLinks"></div>
+      </div>
+
+      <p class="disclaimer">Data comes from public sources (Open-Meteo air quality, U.S. EPA, EWG). Live readings are modeled estimates for your ZIP&rsquo;s center point and are not a substitute for an official local advisory or a certified test. Always confirm with your water utility or local health department.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .zipbar{display:flex;gap:10px;flex-wrap:wrap;max-width:460px;margin:26px 0 0}
+  .zipbar input{flex:1;min-width:200px;padding:.85em 1.1em;border-radius:var(--radius-sm);border:1px solid var(--d-line-2);background:rgba(255,255,255,.06);color:#fff;font-size:1.05rem;font-family:var(--mono);letter-spacing:.15em}
+  .zipbar input::placeholder{color:var(--d-text-3);letter-spacing:.05em}
+  .zipbar input:focus{outline:none;border-color:var(--purple-2)}
+  .status{margin-top:14px;font-family:var(--mono);font-size:.82rem;color:var(--d-text-2);min-height:1em}
+  .status.err{color:#f2a59d}
+
+  .reshead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:30px}
+  .reshead h2{font-size:clamp(1.6rem,3vw,2.2rem)}
+  .reshead .loc{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+
+  .aqi{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;border:1px solid var(--line);border-left:6px solid var(--aqi,#8b5cf6);border-radius:var(--radius);padding:26px;background:var(--paper);margin-bottom:16px}
+  @media(max-width:560px){.aqi{grid-template-columns:1fr;gap:14px}}
+  .aqi .num{font-family:var(--display);font-weight:600;font-size:4rem;line-height:1;color:var(--aqi,#8b5cf6)}
+  .aqi .cat{font-family:var(--display);font-size:1.5rem;font-weight:600;margin:0 0 4px}
+  .aqi .sub{color:var(--ink-2);margin:0;font-size:1rem}
+  .aqi .tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:8px}
+
+  .pollutants{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0 34px}
+  @media(max-width:700px){.pollutants{grid-template-columns:repeat(2,1fr)}}
+  .poll{border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;background:#fff}
+  .poll .k{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .poll .v{font-family:var(--display);font-weight:600;font-size:1.5rem;margin-top:4px}
+  .poll .u{font-size:.8rem;color:var(--ink-3);font-weight:400}
+
+  .srcgrid{margin-top:8px}
+  .srccard{display:block;border:1px solid var(--line);border-radius:var(--radius);padding:22px;background:#fff;text-decoration:none;transition:transform .16s ease,box-shadow .16s ease}
+  .srccard:hover{transform:translateY(-3px);box-shadow:var(--shadow);color:inherit}
+  .srccard .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--purple-ink)}
+  .srccard h3{font-size:1.15rem;margin:8px 0 6px}
+  .srccard p{color:var(--ink-2);font-size:.94rem;margin:0}
+  .srccard .go{color:var(--purple-ink);font-weight:600;font-size:.9rem;margin-top:12px;display:inline-block}
+  .disclaimer{margin-top:36px;color:var(--ink-3);font-size:.86rem;line-height:1.6;max-width:70ch}
+  .reslinks h2{font-size:1.4rem;margin:8px 0 18px}
+</style>
+
+<script>
+  const form = document.getElementById('zipForm');
+  const zipInput = document.getElementById('zip');
+  const statusEl = document.getElementById('status');
+  const resultsEl = document.getElementById('results');
+  const introEl = document.getElementById('intro');
+
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // US AQI bands → label, plain-language guidance, color
+  function aqiBand(v) {
+    if (v == null || isNaN(v)) return null;
+    if (v <= 50) return { cat: 'Good', color: '#2e9e5b', sub: 'Air quality is satisfactory; little or no risk.' };
+    if (v <= 100) return { cat: 'Moderate', color: '#c9a227', sub: 'Acceptable, but unusually sensitive people should watch symptoms.' };
+    if (v <= 150) return { cat: 'Unhealthy for Sensitive Groups', color: '#e0772f', sub: 'Kids, older adults, and heart/lung conditions should limit prolonged outdoor exertion.' };
+    if (v <= 200) return { cat: 'Unhealthy', color: '#d1443e', sub: 'Everyone may feel effects; sensitive groups more serious ones.' };
+    if (v <= 300) return { cat: 'Very Unhealthy', color: '#8b5cf6', sub: 'Health alert — everyone may experience more serious effects.' };
+    return { cat: 'Hazardous', color: '#7d2230', sub: 'Emergency conditions; everyone should stay indoors.' };
+  }
+
+  function officialLinks(zip) {
+    const z = zip || '';
+    return [
+      { k: 'Drinking Water', title: 'EWG Tap Water Database', desc: 'Contaminants detected in your utility’s water, vs. health guidelines.', url: z ? `https://www.ewg.org/tapwater/search-results.php?zip5=${z}` : 'https://www.ewg.org/tapwater/' },
+      { k: 'Contaminated Sites', title: 'EPA Superfund — near you', desc: 'Federally designated hazardous-waste cleanup sites by location.', url: 'https://www.epa.gov/superfund/search-superfund-sites-where-you-live' },
+      { k: 'Polluters & Violations', title: 'EPA ECHO facility search', desc: 'Regulated facilities near you and their compliance/violation history.', url: 'https://echo.epa.gov/facilities/facility-search' },
+      { k: 'Air Quality', title: 'AirNow — official AQI', desc: 'The EPA’s official current and forecast air quality by ZIP.', url: 'https://www.airnow.gov/' },
+    ].map((s) => `<a class="srccard" href="${s.url}" target="_blank" rel="noopener noreferrer">
+        <span class="k">${s.k}</span><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p>
+        <span class="go">Open official database →</span></a>`).join('');
+  }
+
+  // populate the pre-search generic links
+  document.getElementById('genericLinks').innerHTML = officialLinks('');
+
+  function pollutant(k, v, u) {
+    if (v == null || isNaN(v)) return '';
+    return `<div class="poll"><div class="k">${k}</div><div class="v">${Math.round(v)} <span class="u">${u}</span></div></div>`;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const z = (zipInput.value || '').trim();
+    statusEl.classList.remove('err');
+    if (!/^\d{5}$/.test(z)) { statusEl.textContent = 'Please enter a valid 5-digit ZIP code.'; statusEl.classList.add('err'); return; }
+    statusEl.textContent = `Looking up ${z}…`;
+    try {
+      const geoRes = await fetch(`https://api.zippopotam.us/us/${z}`);
+      if (!geoRes.ok) throw new Error('zip');
+      const geo = await geoRes.json();
+      const p = geo.places[0];
+      const loc = `${p['place name']}, ${p['state abbreviation']} ${z}`;
+      const lat = p.latitude, lon = p.longitude;
+
+      let aqiHtml = '';
+      try {
+        const aqRes = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi,pm2_5,pm10,ozone,nitrogen_dioxide,sulphur_dioxide,carbon_monoxide&timezone=auto`);
+        const aq = await aqRes.json();
+        const c = aq.current || {};
+        const band = aqiBand(c.us_aqi);
+        if (band) {
+          aqiHtml = `
+            <div class="aqi" style="--aqi:${band.color}">
+              <div class="num">${Math.round(c.us_aqi)}</div>
+              <div><span class="tag">Live US Air Quality Index · updated ${esc((c.time || '').replace('T', ' '))}</span>
+                <p class="cat" style="color:${band.color}">${band.cat}</p>
+                <p class="sub">${band.sub}</p></div>
+            </div>
+            <div class="pollutants">
+              ${pollutant('PM2.5', c.pm2_5, 'µg/m³')}
+              ${pollutant('PM10', c.pm10, 'µg/m³')}
+              ${pollutant('Ozone', c.ozone, 'µg/m³')}
+              ${pollutant('NO₂', c.nitrogen_dioxide, 'µg/m³')}
+            </div>`;
+        }
+      } catch (_) { /* air data optional */ }
+      if (!aqiHtml) aqiHtml = `<p class="disclaimer">Live air-quality data isn’t available for this point right now — the official databases below still work.</p>`;
+
+      resultsEl.innerHTML = `
+        <div class="reshead"><h2>Your area</h2><span class="loc">${esc(loc)} · ${p.latitude}, ${p.longitude}</span></div>
+        ${aqiHtml}
+        <div class="reslinks"><h2>Official contamination records for ${z}</h2>
+          <div class="grid grid-2 srcgrid">${officialLinks(z)}</div></div>`;
+      resultsEl.hidden = false;
+      introEl.hidden = true;
+      statusEl.textContent = '';
+      resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      statusEl.classList.add('err');
+      statusEl.textContent = `Couldn’t find ZIP ${z}. Check the number, or use the official databases below.`;
+    }
+  });
+</script>
