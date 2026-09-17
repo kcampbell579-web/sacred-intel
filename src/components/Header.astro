@@ -1,7 +1,7 @@
 ---
-import { seriesList } from '../lib/series.js';
+import { SECTIONS } from '../lib/sections.js';
 const path = Astro.url.pathname;
-const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href));
+const on = (href) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
 <header class="site-header">
   <div class="wrap header-inner">
@@ -11,27 +11,18 @@ const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href))
     </a>
 
     <nav class="nav-links" aria-label="Primary">
-      <a href="/episodes/" class={isActive('/episodes') ? 'active' : ''}>Episodes</a>
-      <div class="nav-drop">
-        <button type="button" aria-haspopup="true">Series
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
-        </button>
-        <div class="menu">
-          {seriesList.map((s) => (
-            <a href={`/series/${s.slug}/`}>{s.name}</a>
-          ))}
-        </div>
-      </div>
-      <a href="/articles/" class={isActive('/articles') ? 'active' : ''}>Articles</a>
-      <a href="/lookup/" class={isActive('/lookup') ? 'active' : ''}>Check Your Area</a>
-      <a href="/about/" class={isActive('/about') ? 'active' : ''}>About</a>
-      <a href="/guests/" class={isActive('/guests') ? 'active' : ''}>Guests</a>
-      <a href="/contact/" class={isActive('/contact') ? 'active' : ''}>Contact</a>
+      <a href="/latest/" class={on('/latest') ? 'active' : ''}>Latest</a>
+      <a href="/investigations/" class={on('/investigations') ? 'active' : ''}>Investigations</a>
+      {SECTIONS.map((s) => (
+        <a href={`/section/${s.slug}/`} class={path.startsWith(`/section/${s.slug}`) ? 'active' : ''}>{s.name}</a>
+      ))}
+      <a href="/episodes/" class={on('/episodes') ? 'active' : ''}>Podcast</a>
+      <a href="/lookup/" class={on('/lookup') ? 'active' : ''}>Check Your Area</a>
     </nav>
 
     <div class="nav-cta">
-      <a href="/episodes/" class="btn btn-ghost btn-sm hide-sm">Browse</a>
-      <a href="/contact/" class="btn btn-primary btn-sm hide-sm">Subscribe</a>
+      <a href="/about/" class="btn btn-ghost btn-sm hide-sm">About</a>
+      <a href="/#intel-brief" class="btn btn-primary btn-sm hide-sm">Subscribe</a>
       <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
@@ -39,14 +30,14 @@ const isActive = (href) => (href === '/' ? path === '/' : path.startsWith(href))
   </div>
 
   <div class="mobile-menu" id="mobileMenu">
-    <a href="/episodes/">Episodes</a>
-    <div class="grp">Series</div>
-    {seriesList.map((s) => <a href={`/series/${s.slug}/`}>{s.name}</a>)}
+    <a href="/latest/">Latest</a>
+    <a href="/investigations/">Investigations</a>
+    <div class="grp">Sections</div>
+    {SECTIONS.map((s) => <a href={`/section/${s.slug}/`}>{s.name}</a>)}
     <div class="grp">More</div>
+    <a href="/episodes/">Podcast</a>
     <a href="/lookup/">Check Your Area</a>
-    <a href="/articles/">Articles / Intel</a>
-    <a href="/about/">About Sacred Intel</a>
-    <a href="/guests/">Guests / Become a Guest</a>
+    <a href="/about/">About</a>
     <a href="/contact/">Contact</a>
   </div>
 </header>

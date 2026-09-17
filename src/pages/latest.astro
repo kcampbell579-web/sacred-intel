@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { SECTIONS } from '../lib/sections.js';
+
+const articles = (await getCollection('articles', (a) => !a.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+<Base title="Latest" description="The latest reporting from Sacred Intel on safety, environment, health, and infrastructure — filter by section or search.">
+  <section class="page-hero"><div class="wrap page-hero-inner">
+    <span class="eyebrow">Latest Reporting</span>
+    <h1>Everything we're covering</h1>
+    <p>The full file — filter by section or search for a story.</p>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="filter">
+      <input type="search" class="search" id="q" placeholder="Search stories — PFAS, recall, Legionnaires…" aria-label="Search stories" />
+      <div class="filter-row"><span class="filter-label">Section</span>
+        <button class="fbtn active" data-section="all">All</button>
+        {SECTIONS.map((s) => <button class="fbtn" data-section={s.slug}>{s.name}</button>)}
+      </div>
+    </div>
+    <div class="grid grid-3" id="grid">{articles.map((a) => <ArticleCard article={a} />)}</div>
+    <p class="no-results" id="none">No stories match those filters.</p>
+  </div></section>
+</Base>
+
+<script>
+  const cards = [...document.querySelectorAll('#grid [data-article]')];
+  const q = document.getElementById('q');
+  const none = document.getElementById('none');
+  let sec = 'all';
+  function apply() {
+    const t = (q.value || '').trim().toLowerCase();
+    let n = 0;
+    cards.forEach((c) => {
+      const ms = sec === 'all' || c.dataset.section === sec;
+      const mt = !t || c.dataset.title.includes(t) || (c.dataset.topics || '').includes(t);
+      const show = ms && mt; c.style.display = show ? '' : 'none'; if (show) n++;
+    });
+    none.style.display = n ? 'none' : 'block';
+  }
+  document.querySelectorAll('.fbtn[data-section]').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('.fbtn[data-section]').forEach((x) => x.classList.remove('active'));
+    b.classList.add('active'); sec = b.dataset.section; apply();
+  }));
+  q.addEventListener('input', apply);
+</script>

@@ -1,150 +1,153 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import EpisodeCard from '../components/EpisodeCard.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import EpisodeArt from '../components/EpisodeArt.astro';
-import SeriesBadge from '../components/SeriesBadge.astro';
-import SubscribeLinks from '../components/SubscribeLinks.astro';
 import Newsletter from '../components/Newsletter.astro';
+import SubscribeLinks from '../components/SubscribeLinks.astro';
+import { articleImage, siteImage, episodeImage } from '../lib/images.js';
+import { sectionOf, sectionBySlug, isInvestigation } from '../lib/sections.js';
 import { seriesList } from '../lib/series.js';
 
-const allEpisodes = (await getCollection('episodes', (e) => !e.data.draft)).sort(
+const articles = (await getCollection('articles', (a) => !a.data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
-const featured = allEpisodes.find((e) => e.data.featured) || allEpisodes[0];
-const latest = allEpisodes.filter((e) => e.slug !== featured?.slug).slice(0, 6);
+const lead = articles[0];
+const rail = articles.slice(1, 6);
+const topStories = articles.slice(6, 9);
+const investigations = articles.filter(isInvestigation).slice(0, 3);
 
-const articles = (await getCollection('articles', (a) => !a.data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const episodes = (await getCollection('episodes', (e) => !e.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const featuredEp = episodes.find((e) => e.data.featured) || episodes[0];
 
-const fd = featured?.data;
-const fdate = fd?.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+const fmt = (d) => d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+const leadSec = sectionBySlug[sectionOf(lead)];
+const leadPhoto = lead.data.image || articleImage(lead.slug);
 ---
 <Base>
-  <!-- Hero -->
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <div class="hero-grid">
-        <div>
-          <span class="eyebrow">The Sacred Intel Podcast</span>
-          <h1>The stories behind safety, science &amp; failure.</h1>
-          <p class="lead">Twenty-minute investigations into environmental health, workplace safety, engineering disasters, and the science driving the headlines — credible, conversational, and relentlessly sourced.</p>
+  <!-- Lead / hero -->
+  <section class="news-hero">
+    <div class="wrap">
+      <div class="news-hero-grid">
+        <div class="copy">
+          <a class="kicker-link" href={`/section/${leadSec.slug}/`}><span class="kicker">Investigation · {leadSec.name}</span></a>
+          <h1><a href={`/articles/${lead.slug}/`} style="color:#fff">{lead.data.title}</a></h1>
+          <p class="dek">{lead.data.description}</p>
+          <p class="byl">By {lead.data.author} · {fmt(lead.data.date)}</p>
           <div class="hero-actions">
-            <a href="/episodes/" class="btn btn-primary btn-lg">Browse episodes</a>
-            <a href="#subscribe" class="btn btn-ghost btn-lg">Where to listen</a>
+            <a href={`/articles/${lead.slug}/`} class="btn btn-primary">Read the story</a>
+            <a href="/latest/" class="btn btn-ghost">Latest reporting</a>
           </div>
         </div>
-        <div>
-          {featured && (
-            <a href={`/episodes/${featured.slug}/`} aria-label={fd.title}>
-              <EpisodeArt number={fd.number} title={fd.title} series={fd.series} image={fd.image} showPlay={true} />
-            </a>
-          )}
+        <div class:list={['shot', { placeholder: !leadPhoto }]}>
+          {leadPhoto && <img src={leadPhoto} alt={lead.data.title} />}
+          <span class="cap">{leadSec.name} · Sacred Intel</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Featured / latest episode -->
-  {featured && (
-    <section class="section section-charcoal">
-      <div class="wrap">
-        <div class="featured">
-          <a href={`/episodes/${featured.slug}/`} aria-label={fd.title}>
-            <EpisodeArt number={fd.number} title={fd.title} series={fd.series} image={fd.image} showPlay={true} />
-          </a>
-          <div>
-            <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
-              <span class="eyebrow">Latest episode</span>
-              <SeriesBadge series={fd.series} />
-            </div>
-            <h2>{fd.title}</h2>
-            <p>{fd.description}</p>
-            <div class="meta" style="margin-bottom:22px">
-              <span>Episode {String(fd.number).padStart(2, '0')}</span>
-              <span>{fdate}</span>
-              <span>{fd.duration}</span>
-            </div>
-            <a href={`/episodes/${featured.slug}/`} class="btn btn-primary">Listen &amp; read the sources</a>
-          </div>
+  <!-- Top story + Latest rail -->
+  <section class="section">
+    <div class="wrap">
+      <div class="front">
+        <div class="leadstory">
+          <p class="blockhead">Top story</p>
+          {(() => {
+            const t = topStories[0] || articles[1];
+            const ts = sectionBySlug[sectionOf(t)];
+            const ph = t.data.image || articleImage(t.slug);
+            return (
+              <>
+                <a href={`/articles/${t.slug}/`}><div class:list={['shot', { ph: !ph }]} style={`--dot:#8b5cf6`}>{ph && <img src={ph} alt={t.data.title} />}</div></a>
+                <a class="kicker-link" href={`/section/${ts.slug}/`}><span class="kicker">{ts.name}</span></a>
+                <h2><a href={`/articles/${t.slug}/`}>{t.data.title}</a></h2>
+                <p>{t.data.description}</p>
+                <div class="meta"><span>By {t.data.author.split(',')[0]}</span><span>{fmt(t.data.date)}</span></div>
+              </>
+            );
+          })()}
         </div>
+
+        <div class="rail">
+          <p class="blockhead">Latest <a href="/latest/">View all →</a></p>
+          {rail.map((a) => {
+            const s = sectionBySlug[sectionOf(a)];
+            const ph = a.data.image || articleImage(a.slug);
+            return (
+              <div class="item">
+                <a href={`/articles/${a.slug}/`} class:list={['thumb', { ph: !ph }]} style={`--dot:${'#8b5cf6'}`}>{ph && <img src={ph} alt={a.data.title} />}</a>
+                <div>
+                  <span class="kicker">{s.name}</span>
+                  <h4><a href={`/articles/${a.slug}/`}>{a.data.title}</a></h4>
+                  <span class="m">{a.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- More top stories -->
+  {topStories.length > 1 && (
+    <section class="section section-paper">
+      <div class="wrap">
+        <div class="head-row"><h2>More reporting</h2><a class="btn btn-ghost btn-sm" href="/latest/">All stories →</a></div>
+        <div class="grid grid-3">{topStories.slice(1).concat(articles.slice(9, 11)).slice(0, 3).map((a) => <ArticleCard article={a} />)}</div>
       </div>
     </section>
   )}
 
   <!-- Series -->
-  <section class="section section-paper">
+  <section class="section section-dark">
     <div class="wrap">
-      <div class="section-head center">
-        <span class="eyebrow">The Series</span>
-        <h2>Three ways into the story</h2>
-        <p>Every episode belongs to one of three investigative tracks. Pick your entry point.</p>
-      </div>
+      <div class="section-head"><span class="eyebrow">The Series</span><h2>Reporting in three tracks</h2>
+        <p>Beyond the daily file, our deeper work runs in three investigative series.</p></div>
       <div class="grid grid-3">
         {seriesList.map((s) => (
           <a class="series-card" href={`/series/${s.slug}/`} style={`--dot:${s.color}`}>
-            <span class="eyebrow">Series</span>
-            <h3>{s.name}</h3>
-            <p>{s.blurb}</p>
-            <span class="arrow">→</span>
+            <span class="eyebrow">Series</span><h3>{s.name}</h3><p>{s.blurb.split('—')[0]}</p><span class="arrow">→</span>
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Latest episodes grid -->
-  <section class="section">
-    <div class="wrap">
-      <div class="head-row">
-        <div>
-          <span class="eyebrow">On the feed</span>
-          <h2>Latest episodes</h2>
-        </div>
-        <a href="/episodes/" class="btn btn-ghost btn-sm">All episodes →</a>
-      </div>
-      <div class="grid grid-3">
-        {latest.map((e) => <EpisodeCard episode={e} />)}
-      </div>
-    </div>
-  </section>
-
-  <!-- Subscribe band -->
-  <section class="section section-dark" id="subscribe">
-    <div class="wrap center">
-      <span class="eyebrow">Subscribe</span>
-      <h2 style="font-size:clamp(1.8rem,3.6vw,2.6rem);margin:12px 0 10px">Listen wherever you get podcasts</h2>
-      <p style="color:var(--d-text-2);max-width:52ch;margin:0 auto 26px">New episode every week. Follow the show so the next investigation lands in your feed automatically.</p>
-      <div style="display:flex;justify-content:center">
-        <SubscribeLinks label={null} />
-      </div>
-    </div>
-  </section>
-
-  <!-- Articles -->
-  {articles.length > 0 && (
-    <section class="section section-paper">
+  <!-- Investigations -->
+  {investigations.length > 0 && (
+    <section class="section">
       <div class="wrap">
-        <div class="head-row">
-          <div>
-            <span class="eyebrow">Articles / Intel</span>
-            <h2>Read the reporting</h2>
-          </div>
-          <a href="/articles/" class="btn btn-ghost btn-sm">All articles →</a>
-        </div>
-        <div class="grid grid-3">
-          {articles.map((a) => <ArticleCard article={a} />)}
-        </div>
+        <div class="head-row"><div><span class="eyebrow">Sacred Intel Investigations</span><h2 style="margin-top:8px">Go beyond the headline</h2></div><a class="btn btn-ghost btn-sm" href="/investigations/">All investigations →</a></div>
+        <div class="grid grid-3">{investigations.map((a) => <ArticleCard article={a} />)}</div>
       </div>
     </section>
   )}
 
-  <!-- Newsletter -->
-  <section class="section">
+  <!-- Podcast strip -->
+  <section class="section section-charcoal">
     <div class="wrap">
-      <Newsletter />
+      <div class="podstrip">
+        <div>
+          <span class="eyebrow">The Sacred Intel Podcast</span>
+          <h2 style="font-size:clamp(1.6rem,3vw,2.3rem);margin:12px 0">The reporting, in audio</h2>
+          <p style="color:var(--d-text-2);margin:0 0 20px;max-width:42ch">Twenty-minute investigations into safety, science, engineering, and environmental health.</p>
+          <div style="margin-bottom:18px"><SubscribeLinks label={null} /></div>
+          <a href="/episodes/" class="btn btn-ghost">Browse all episodes →</a>
+        </div>
+        {featuredEp && (
+          <a href={`/episodes/${featuredEp.slug}/`} class="art">
+            {episodeImage(featuredEp.slug) ? <img src={episodeImage(featuredEp.slug)} alt={featuredEp.data.title} /> : null}
+          </a>
+        )}
+      </div>
     </div>
+  </section>
+
+  <!-- Intel Brief newsletter -->
+  <section class="section" id="intel-brief">
+    <div class="wrap"><Newsletter title="Understand what's happening — and why" text="The Intel Brief: the week's most important developments in safety, environmental health, and infrastructure, with the context the headline leaves out. Free. No noise." /></div>
   </section>
 </Base>

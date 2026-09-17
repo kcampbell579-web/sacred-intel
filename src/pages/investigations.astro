@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import Newsletter from '../components/Newsletter.astro';
+import { isInvestigation } from '../lib/sections.js';
+
+const investigations = (await getCollection('articles', (a) => !a.data.draft))
+  .filter(isInvestigation)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title="Investigations" description="In-depth Sacred Intel investigations — built on primary records, data, and expert analysis.">
+  <section class="page-hero"><div class="wrap page-hero-inner">
+    <span class="eyebrow">Investigations</span>
+    <h1>Go beyond the headline</h1>
+    <p>Our longer work — explainers, deep dives, and field guides built on documents, data, and expert analysis.</p>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    {investigations.length ? (
+      <div class="grid grid-3">{investigations.map((a) => <ArticleCard article={a} />)}</div>
+    ) : (
+      <p class="meta">New investigations are in the works — check back soon.</p>
+    )}
+  </div></section>
+
+  <section class="section section-paper"><div class="wrap"><Newsletter /></div></section>
+</Base>

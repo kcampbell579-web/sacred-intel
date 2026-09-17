@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { SECTIONS, sectionBySlug, sectionOf } from '../../lib/sections.js';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', (a) => !a.data.draft);
+  return SECTIONS.map((s) => ({
+    params: { section: s.slug },
+    props: {
+      section: s,
+      articles: articles
+        .filter((a) => sectionOf(a) === s.slug)
+        .sort((x, y) => y.data.date.valueOf() - x.data.date.valueOf()),
+    },
+  }));
+}
+
+const { section, articles } = Astro.props;
+---
+<Base title={section.name} description={section.blurb}>
+  <section class="page-hero"><div class="wrap page-hero-inner">
+    <span class="eyebrow">Section</span>
+    <h1>{section.name}</h1>
+    <p>{section.blurb}</p>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="head-row"><h2>{articles.length} stor{articles.length === 1 ? 'y' : 'ies'}</h2><a class="btn btn-ghost btn-sm" href="/latest/">All reporting →</a></div>
+    {articles.length ? (
+      <div class="grid grid-3">{articles.map((a) => <ArticleCard article={a} />)}</div>
+    ) : (<p class="meta">No stories in this section yet.</p>)}
+  </div></section>
+
+  <section class="section section-paper"><div class="wrap">
+    <div class="section-head center"><span class="eyebrow">Explore</span><h2>Other sections</h2></div>
+    <div class="grid grid-3">
+      {SECTIONS.filter((s) => s.slug !== section.slug).map((s) => (
+        <a class="series-card" href={`/section/${s.slug}/`} style="--dot:#8b5cf6"><span class="eyebrow">Section</span><h3>{s.name}</h3><p>{s.blurb}</p><span class="arrow">→</span></a>
+      ))}
+    </div>
+  </div></section>
+</Base>

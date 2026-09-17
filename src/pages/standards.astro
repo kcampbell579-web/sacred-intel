@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site.js';
+---
+<Base title="Editorial Standards" description="How Sacred Intel reports: sourcing, corrections, independence, fact-checking, and our policy on AI.">
+  <section class="page-hero"><div class="wrap page-hero-inner">
+    <span class="eyebrow">Standards</span>
+    <h1>How we report</h1>
+    <p>Sacred Intel is independent journalism about risk. These are the rules we hold ourselves to.</p>
+  </div></section>
+
+  <section class="section"><div class="wrap-narrow prose">
+    <h2 id="editorial">Editorial standards</h2>
+    <p>Every story is built from primary sources — agency records, peer-reviewed research, court filings, and inspection data. We explain what the evidence shows, what it doesn't, and where the uncertainty lives. We do not sensationalize risk, and we do not minimize it.</p>
+
+    <h2 id="corrections">Corrections policy</h2>
+    <p>We fix mistakes promptly and publicly. When we correct a story, we note what changed and when. If you spot an error, email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with the headline and the specifics.</p>
+
+    <h2 id="ethics">Ethics &amp; independence</h2>
+    <p>Our reporting is independent of advertisers, sponsors, and sources. Where a potential conflict exists, we disclose it in the story itself. No source reviews our coverage before publication.</p>
+
+    <h2 id="sources">Source policy</h2>
+    <p>We prefer named, on-the-record sources and link to primary documents wherever possible so readers can check our work. We grant anonymity only when a source faces a real risk, and never to let someone attack a rival without accountability.</p>
+
+    <h2 id="fact-checking">Fact-checking</h2>
+    <p>Factual claims are checked against original records before publication. Statistics are traced to their source and dated. If a number is an estimate or contested, we say so.</p>
+
+    <h2 id="ai">AI policy</h2>
+    <p>We use software tools to help research, organize, and format our work, but every published story reflects human editorial judgment and is reviewed by a person before it runs. Reporting, analysis, and conclusions are ours.</p>
+
+    <hr />
+    <p>Questions about our standards? Write to <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+  </div></section>
+</Base>

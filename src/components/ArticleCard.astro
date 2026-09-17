@@ -1,28 +1,24 @@
 ---
+import { articleImage } from '../lib/images.js';
+import { sectionOf, sectionBySlug } from '../lib/sections.js';
 const { article } = Astro.props;
 const { data, slug } = article;
 const date = data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const photo = data.image || articleImage(slug);
+const sec = sectionBySlug[sectionOf(article)];
 ---
-<article class="ep-card" data-article data-title={data.title.toLowerCase()} data-topics={data.topics.join('|').toLowerCase()}>
-  <a href={`/articles/${slug}/`}>
-    <div class="ep-art" style="--dot:#8b5cf6">
-      {data.image ? (
-        <img src={data.image} alt={data.title} loading="lazy" />
-      ) : (
-        <div class="gen">
-          <div class="top"><span class="ser">{data.category}</span></div>
-          <div class="ttl">{data.title}</div>
-        </div>
-      )}
-    </div>
+<article class="ep-card" data-article data-section={sec.slug} data-cat={data.category.toLowerCase()} data-title={data.title.toLowerCase()} data-topics={data.topics.join('|').toLowerCase()}>
+  <a href={`/articles/${slug}/`} class="cover">
+    {photo ? (
+      <div class="ep-art"><img src={photo} alt={data.title} loading="lazy" /></div>
+    ) : (
+      <div class="ep-art" style="--dot:#8b5cf6"><div class="gen"><div class="top"><span class="ser">{sec.name}</span></div><div class="ttl">{data.title}</div></div></div>
+    )}
   </a>
   <div class="card-body">
-    <span class="chip">{data.category}</span>
+    <a class="kicker-link" href={`/section/${sec.slug}/`}><span class="kicker">{sec.name}</span></a>
     <h3><a href={`/articles/${slug}/`}>{data.title}</a></h3>
     <p>{data.description}</p>
-    <div class="card-foot meta">
-      <span>{data.author}</span>
-      <span>{date}</span>
-    </div>
+    <div class="card-foot meta"><span>{data.author.split(',')[0]}</span><span>{date}</span></div>
   </div>
 </article>

@@ -25,7 +25,7 @@ const related = all
 <Base title={data.title} description={data.description} type="article" image={data.image || '/favicon.svg'}>
   <section class="page-hero">
     <div class="wrap page-hero-inner" style="max-width:820px">
-      <a href="/articles/" class="backlink" style="color:var(--d-text-3);font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase">← All articles</a>
+      <a href="/latest/" class="backlink" style="color:var(--d-text-3);font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase">← All reporting</a>
       <span class="chip" style="margin:16px 0 0">{data.category}</span>
       <h1>{data.title}</h1>
       <p class="meta" style="margin-top:16px">By {data.author} · {date}</p>
@@ -50,7 +50,7 @@ const related = all
   {related.length > 0 && (
     <section class="section section-paper">
       <div class="wrap">
-        <div class="head-row"><h2>More Intel</h2><a href="/articles/" class="btn btn-ghost btn-sm">All articles →</a></div>
+        <div class="head-row"><h2>More Intel</h2><a href="/latest/" class="btn btn-ghost btn-sm">All reporting →</a></div>
         <div class="grid grid-3">{related.map((a) => <ArticleCard article={a} />)}</div>
       </div>
     </section>
