@@ -39,7 +39,10 @@ const MAP = {
   'newtown-creek-reclassification': 'environment',
   'new-york-plastic-waste-guardian': 'environment',
   'bald-eagle-nestlings-pfas-fingerprints': 'environment',
+  'lead-service-line-inventories-unknown-pipes': 'environment',
+  'wotus-reopened-supplemental-notice': 'environment',
   // Health
+  'mount-sinai-wtc-responders-neighborhood': 'health',
   'centric-compounding-iv-endotoxin-recall': 'health',
   'bronx-legionnaires-nine-cases-yankee-stadium-pcr': 'health',
   'air-noise-light-pollution-mental-health-review': 'health',
