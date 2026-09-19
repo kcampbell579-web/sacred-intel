@@ -2,54 +2,49 @@
 import { SITE } from '../lib/site.js';
 import { SECTIONS } from '../lib/sections.js';
 const year = new Date().getFullYear();
-const standards = [
-  ['Editorial Standards', '/standards/#editorial'],
-  ['Corrections Policy', '/standards/#corrections'],
-  ['Ethics & Independence', '/standards/#ethics'],
-  ['Source Policy', '/standards/#sources'],
-  ['Fact-Checking', '/standards/#fact-checking'],
-  ['AI Policy', '/standards/#ai'],
-];
 ---
 <footer class="site-footer">
   <div class="wrap">
+    <div class="foot-brand">
+      <a class="wordmark" href="/">SACRED <span class="intel">INTEL</span></a>
+      <span class="fline">Environmental health. Public safety. Real impact.</span>
+    </div>
     <div class="foot-grid">
       <div>
-        <a class="brand" href="/" style="color:#fff">
-          <img src="/favicon.svg" alt="" width="30" height="30" />
-          <span class="bt">Sacred Intel</span>
-        </a>
-        <p class="foot-about">Independent journalism for a safer, more informed world — safety, science, engineering, and environmental health.</p>
-        <div class="subscribe">{SITE.subscribe.slice(0, 3).map((s) => <a href={s.href}>{s.name}</a>)}</div>
-      </div>
-      <div>
-        <h4>Reporting</h4>
-        <a href="/latest/">Latest</a>
-        <a href="/investigations/">Investigations</a>
+        <h4>Sections</h4>
+        <a href="/latest/">News</a>
         {SECTIONS.map((s) => <a href={`/section/${s.slug}/`}>{s.name}</a>)}
+        <a href="/investigations/">Investigations</a>
       </div>
       <div>
-        <h4>Standards</h4>
-        {standards.map(([label, href]) => <a href={href}>{label}</a>)}
-      </div>
-      <div>
-        <h4>Sacred Intel</h4>
-        <a href="/about/">About</a>
-        <a href="/contact/">Contact</a>
-        <a href="/guests/">Become a Guest</a>
+        <h4>Explore</h4>
+        <a href="/data/">Data &amp; Tools</a>
+        <a href="/watch/">Watch + Listen</a>
         <a href="/episodes/">Podcast</a>
-        <a href="/lookup/">Check Your Area</a>
+        <a href="/#intel-brief">Newsletter</a>
+        <a href="/series/disaster-files/">Series</a>
+      </div>
+      <div>
+        <h4>About</h4>
+        <a href="/about/">Our Team</a>
+        <a href="/standards/">Editorial Standards</a>
+        <a href="/standards/#sources">Sources &amp; Methodology</a>
+        <a href="/standards/#corrections">Corrections Policy</a>
+        <a href="/contact/">Contact</a>
+        <a href="/contact/">Submit a Tip</a>
       </div>
       <div>
         <h4>Follow</h4>
-        {SITE.social.map((s) => <a href={s.href}>{s.name}</a>)}
+        <a href="#">Instagram</a>
+        <a href="#">YouTube</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">X</a>
         <a href="/podcast.xml">RSS</a>
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>&copy; {year} Sacred Intel. All rights reserved.</span>
-      <span class="mono">Independent media · Reported &amp; sourced</span>
+      <span>&copy; {year} Sacred Intel · A safer, healthier, more informed tomorrow.</span>
+      <span>Independent media · Reported &amp; sourced · <a href={`mailto:${SITE.email}`}>{SITE.email}</a></span>
     </div>
   </div>
 </footer>

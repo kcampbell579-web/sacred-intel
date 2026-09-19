@@ -1,17 +1,15 @@
 ---
-// Email newsletter signup. Point the form `action` at your email provider
-// (Mailchimp, ConvertKit, Beehiiv, Buttondown, etc.) when ready.
 const {
-  title = 'Get the intel in your inbox',
-  text = 'One email when a new episode or investigation drops. No noise, unsubscribe anytime.',
+  title = 'Get the stories that matter',
+  text = 'Independent reporting, data updates, and new investigations — straight to your inbox. Free. No noise.',
 } = Astro.props;
 ---
 <div class="newsletter">
-  <span class="eyebrow" style="color:rgba(255,255,255,.9)">Newsletter</span>
+  <span class="eyebrow">The Intel Brief</span>
   <h2>{title}</h2>
   <p>{text}</p>
   <form class="nl-form" action="#" method="post" novalidate>
     <input type="email" name="email" placeholder="you@email.com" aria-label="Email address" required />
-    <button type="submit" class="btn btn-light">Subscribe</button>
+    <button type="submit" class="btn btn-primary">Subscribe</button>
   </form>
 </div>

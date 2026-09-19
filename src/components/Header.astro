@@ -1,52 +1,107 @@
 ---
+import { getCollection } from 'astro:content';
 import { SECTIONS } from '../lib/sections.js';
+
 const path = Astro.url.pathname;
-const on = (href) => (href === '/' ? path === '/' : path.startsWith(href));
+const on = (h) => (h === '/' ? path === '/' : path.startsWith(h));
+
+const NAV = [
+  { label: 'News', href: '/latest/' },
+  ...SECTIONS.map((s) => ({ label: s.name, href: `/section/${s.slug}/` })),
+  { label: 'Investigations', href: '/investigations/' },
+  { label: 'Data & Tools', href: '/data/' },
+  { label: 'Watch', href: '/watch/' },
+  { label: 'About', href: '/about/' },
+];
+
+const ticker = (await getCollection('articles', (a) => !a.data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 4);
 ---
 <header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="/" aria-label="Sacred Intel home">
-      <img src="/favicon.svg" alt="" width="30" height="30" />
-      <span class="bt">Sacred Intel<small>Safety · Science · Failure</small></span>
-    </a>
-
-    <nav class="nav-links" aria-label="Primary">
-      <a href="/latest/" class={on('/latest') ? 'active' : ''}>Latest</a>
-      <a href="/investigations/" class={on('/investigations') ? 'active' : ''}>Investigations</a>
-      {SECTIONS.map((s) => (
-        <a href={`/section/${s.slug}/`} class={path.startsWith(`/section/${s.slug}`) ? 'active' : ''}>{s.name}</a>
-      ))}
-      <a href="/episodes/" class={on('/episodes') ? 'active' : ''}>Podcast</a>
-      <a href="/lookup/" class={on('/lookup') ? 'active' : ''}>Check Your Area</a>
-    </nav>
-
-    <div class="nav-cta">
-      <a href="/about/" class="btn btn-ghost btn-sm hide-sm">About</a>
+  <div class="wrap masthead">
+    <div class="masthead-left">
+      <a class="wordmark" href="/">SACRED&nbsp;<span class="intel">INTEL</span></a>
+      <span class="tagline hide-sm">Real stories.<br />Researched truth.<br />A safer tomorrow.</span>
+    </div>
+    <div class="masthead-right">
+      <button class="icon-btn" id="searchOpen" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
       <a href="/#intel-brief" class="btn btn-primary btn-sm hide-sm">Subscribe</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
     </div>
   </div>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="/latest/">Latest</a>
-    <a href="/investigations/">Investigations</a>
-    <div class="grp">Sections</div>
-    {SECTIONS.map((s) => <a href={`/section/${s.slug}/`}>{s.name}</a>)}
-    <div class="grp">More</div>
-    <a href="/episodes/">Podcast</a>
-    <a href="/lookup/">Check Your Area</a>
-    <a href="/about/">About</a>
-    <a href="/contact/">Contact</a>
+  <nav class="nav-primary" aria-label="Primary">
+    <div class="wrap navrow">
+      {NAV.map((n) => <a href={n.href} class={on(n.href) ? 'active' : ''}>{n.label}</a>)}
+    </div>
+  </nav>
+
+  <div class="ticker">
+    <span class="badge">Latest</span>
+    <div class="items">
+      {ticker.map((a, i) => (
+        <>
+          {i > 0 && <span class="sep">|</span>}
+          <a href={`/articles/${a.slug}/`}>{a.data.title}</a>
+        </>
+      ))}
+    </div>
   </div>
 </header>
 
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mtop">
+    <a class="wordmark" href="/">SACRED <span class="intel">INTEL</span></a>
+    <button class="icon-btn" id="navClose" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <form class="msearch" action="/latest/" method="get">
+    <input type="search" name="q" placeholder="Search articles, topics, or locations…" aria-label="Search" />
+    <button class="btn btn-primary btn-sm" type="submit">Go</button>
+  </form>
+  {NAV.map((n) => <a href={n.href} data-close>{n.label}</a>)}
+  <div class="grp">More</div>
+  <a href="/episodes/" data-close>Podcast</a>
+  <a href="/contact/" data-close>Contact</a>
+  <a href="/standards/" data-close>Editorial Standards</a>
+</div>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="icon-btn close" id="searchClose" aria-label="Close search">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <form action="/latest/" method="get">
+    <input type="search" name="q" id="searchInput" placeholder="Search articles, topics, or locations…" aria-label="Search" autocomplete="off" />
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  <p class="hint">Press Enter to search all Sacred Intel reporting.</p>
+</div>
+
 <script>
-  const t = document.getElementById('navToggle');
-  const m = document.getElementById('mobileMenu');
-  t?.addEventListener('click', () => {
-    const open = m.classList.toggle('open');
-    t.setAttribute('aria-expanded', String(open));
-  });
+  const body = document.body;
+  const mnav = document.getElementById('mobileNav');
+  const openBtn = document.getElementById('navToggle');
+  const closeBtn = document.getElementById('navClose');
+  const lock = (on) => body.classList.toggle('no-scroll', on);
+  const openMenu = () => { mnav.classList.add('open'); openBtn.setAttribute('aria-expanded', 'true'); lock(true); };
+  const closeMenu = () => { mnav.classList.remove('open'); openBtn.setAttribute('aria-expanded', 'false'); lock(false); };
+  openBtn?.addEventListener('click', openMenu);
+  closeBtn?.addEventListener('click', closeMenu);
+  mnav?.querySelectorAll('[data-close]').forEach((a) => a.addEventListener('click', closeMenu));
+
+  const so = document.getElementById('searchOverlay');
+  const si = document.getElementById('searchInput');
+  const openSearch = () => { so.classList.add('open'); lock(true); setTimeout(() => si?.focus(), 30); };
+  const closeSearch = () => { so.classList.remove('open'); lock(false); };
+  document.getElementById('searchOpen')?.addEventListener('click', openSearch);
+  document.getElementById('searchClose')?.addEventListener('click', closeSearch);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMenu(); closeSearch(); } });
 </script>

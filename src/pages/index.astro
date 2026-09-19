@@ -3,110 +3,184 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import Newsletter from '../components/Newsletter.astro';
-import SubscribeLinks from '../components/SubscribeLinks.astro';
-import { articleImage, siteImage, episodeImage } from '../lib/images.js';
-import { sectionOf, sectionBySlug, isInvestigation } from '../lib/sections.js';
+import { articleImage, episodeImage } from '../lib/images.js';
+import { sectionOf, sectionBySlug, isInvestigation, SECTIONS } from '../lib/sections.js';
+import { readingTime, fmtDate, fmtDateLong } from '../lib/format.js';
 import { seriesList } from '../lib/series.js';
 
 const articles = (await getCollection('articles', (a) => !a.data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 const lead = articles[0];
-const rail = articles.slice(1, 6);
-const topStories = articles.slice(6, 9);
-const investigations = articles.filter(isInvestigation).slice(0, 3);
+const leadSec = sectionBySlug[sectionOf(lead)];
+const leadPhoto = lead.data.image || articleImage(lead.slug);
+const leadIsInv = isInvestigation(lead);
+
+const mostRead = articles.slice(1, 6);
+
+// one latest story per section for the grid
+const topGrid = SECTIONS.map((s) => articles.find((a) => a.slug !== lead.slug && sectionOf(a) === s.slug)).filter(Boolean);
+const gridSlugs = new Set([lead.slug, ...topGrid.map((a) => a.slug)]);
+const theLatest = articles.filter((a) => !gridSlugs.has(a.slug)).slice(0, 6);
 
 const episodes = (await getCollection('episodes', (e) => !e.data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
-const featuredEp = episodes.find((e) => e.data.featured) || episodes[0];
+const featEp = episodes.find((e) => e.data.featured) || episodes[0];
+const sideEps = episodes.filter((e) => e.slug !== featEp?.slug).slice(0, 3);
 
-const fmt = (d) => d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-const leadSec = sectionBySlug[sectionOf(lead)];
-const leadPhoto = lead.data.image || articleImage(lead.slug);
+const tools = [
+  ['Contamination Lookup', '/data/'],
+  ['Superfund Sites', '/data/'],
+  ['What Was Here Before?', '/data/'],
+  ['Drinking Water Data', '/data/'],
+  ['Air Quality', '/data/'],
+  ['Industrial Facilities', '/data/'],
+];
 ---
 <Base>
-  <!-- Lead / hero -->
-  <section class="news-hero">
-    <div class="wrap">
-      <div class="news-hero-grid">
-        <div class="copy">
-          <a class="kicker-link" href={`/section/${leadSec.slug}/`}><span class="kicker">Investigation · {leadSec.name}</span></a>
-          <h1><a href={`/articles/${lead.slug}/`} style="color:#fff">{lead.data.title}</a></h1>
-          <p class="dek">{lead.data.description}</p>
-          <p class="byl">By {lead.data.author} · {fmt(lead.data.date)}</p>
-          <div class="hero-actions">
-            <a href={`/articles/${lead.slug}/`} class="btn btn-primary">Read the story</a>
-            <a href="/latest/" class="btn btn-ghost">Latest reporting</a>
-          </div>
-        </div>
-        <div class:list={['shot', { placeholder: !leadPhoto }]}>
-          {leadPhoto && <img src={leadPhoto} alt={lead.data.title} />}
-          <span class="cap">{leadSec.name} · Sacred Intel</span>
-        </div>
+  <!-- Hero: feature + Most Read -->
+  <section class="hero-wrap">
+    <div class="feature">
+      {leadPhoto ? <img src={leadPhoto} alt={lead.data.title} /> : <div class="ph"></div>}
+      <div class="scrim"></div>
+      <div class="fc">
+        <span class="cat-label" style={`--dot:${leadIsInv ? 'var(--purple)' : leadSec.color}`}>{leadIsInv ? 'Investigation' : leadSec.name}</span>
+        <h1><a href={`/articles/${lead.slug}/`}>{lead.data.title}</a></h1>
+        <p class="deck">{lead.data.description}</p>
+        <div class="meta"><span>By {lead.data.author.split(',')[0]}</span><span class="sep">|</span><span>{fmtDate(lead.data.date)}</span><span class="sep">|</span><span>{readingTime(lead)} min read</span></div>
+        <a href={`/articles/${lead.slug}/`} class="btn btn-primary btn-lg">{leadIsInv ? 'Read the investigation' : 'Read the story'} →</a>
       </div>
     </div>
+
+    <aside class="mostread">
+      <h3>Most Read</h3>
+      <ol>
+        {mostRead.map((a, i) => {
+          const s = sectionBySlug[sectionOf(a)];
+          return (
+            <li>
+              <span class="rank">{i + 1}</span>
+              <div>
+                <a class="rl" href={`/articles/${a.slug}/`}>{a.data.title}</a>
+                <span class="rm">{s.name} · {readingTime(a)} min read</span>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+      <div class="nl-mini">
+        <h4>Get the stories that matter.</h4>
+        <p>Independent reporting and new investigations, straight to your inbox.</p>
+        <form action="#" method="post" novalidate>
+          <input type="email" placeholder="you@email.com" aria-label="Email" required />
+          <button class="btn btn-primary btn-sm" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </aside>
   </section>
 
-  <!-- Top story + Latest rail -->
+  <!-- Top story grid -->
   <section class="section">
     <div class="wrap">
-      <div class="front">
-        <div class="leadstory">
-          <p class="blockhead">Top story</p>
-          {(() => {
-            const t = topStories[0] || articles[1];
-            const ts = sectionBySlug[sectionOf(t)];
-            const ph = t.data.image || articleImage(t.slug);
-            return (
-              <>
-                <a href={`/articles/${t.slug}/`}><div class:list={['shot', { ph: !ph }]} style={`--dot:#8b5cf6`}>{ph && <img src={ph} alt={t.data.title} />}</div></a>
-                <a class="kicker-link" href={`/section/${ts.slug}/`}><span class="kicker">{ts.name}</span></a>
-                <h2><a href={`/articles/${t.slug}/`}>{t.data.title}</a></h2>
-                <p>{t.data.description}</p>
-                <div class="meta"><span>By {t.data.author.split(',')[0]}</span><span>{fmt(t.data.date)}</span></div>
-              </>
-            );
-          })()}
-        </div>
+      <div class="rulehead"><h2>Top Stories</h2><a class="more" href="/latest/">All reporting →</a></div>
+      <div class="grid grid-4">
+        {topGrid.map((a) => <ArticleCard article={a} />)}
+      </div>
+    </div>
+  </section>
 
-        <div class="rail">
-          <p class="blockhead">Latest <a href="/latest/">View all →</a></p>
-          {rail.map((a) => {
-            const s = sectionBySlug[sectionOf(a)];
-            const ph = a.data.image || articleImage(a.slug);
-            return (
-              <div class="item">
-                <a href={`/articles/${a.slug}/`} class:list={['thumb', { ph: !ph }]} style={`--dot:${'#8b5cf6'}`}>{ph && <img src={ph} alt={a.data.title} />}</a>
-                <div>
-                  <span class="kicker">{s.name}</span>
-                  <h4><a href={`/articles/${a.slug}/`}>{a.data.title}</a></h4>
-                  <span class="m">{a.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                </div>
-              </div>
-            );
-          })}
+  <!-- Data & Tools -->
+  <section class="section datatools">
+    <div class="wrap">
+      <div class="dt-grid">
+        <div class="dt-copy">
+          <span class="eyebrow">Data &amp; Tools</span>
+          <h2>Explore your area</h2>
+          <p>Search your ZIP code to find potential environmental risks, nearby facilities, and the records that describe what's in your air and water.</p>
+          <form class="zipbar" action="/data/" method="get">
+            <input type="text" name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="Enter ZIP code" aria-label="ZIP code" />
+            <button class="btn btn-primary" type="submit">→</button>
+          </form>
+          <div class="dt-tools">
+            {tools.map(([label, href], i) => (
+              <a href={href}><span class="n">{String(i + 1).padStart(2, '0')}</span> {label}</a>
+            ))}
+          </div>
+        </div>
+        <div class="dt-map" aria-hidden="true">
+          <svg viewBox="0 0 400 275" preserveAspectRatio="xMidYMid meet">
+            <rect width="400" height="275" fill="#0d0e13"></rect>
+            {Array.from({ length: 46 }).map((_, i) => {
+              const x = 30 + ((i * 71) % 340) + ((i % 5) * 7);
+              const y = 30 + ((i * 43) % 210) + ((i % 3) * 6);
+              const r = 1.5 + (i % 4);
+              const op = 0.25 + ((i % 5) * 0.15);
+              return <circle cx={x} cy={y} r={r} fill="#8b5cf6" opacity={op}></circle>;
+            })}
+          </svg>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- More top stories -->
-  {topStories.length > 1 && (
-    <section class="section section-paper">
-      <div class="wrap">
-        <div class="head-row"><h2>More reporting</h2><a class="btn btn-ghost btn-sm" href="/latest/">All stories →</a></div>
-        <div class="grid grid-3">{topStories.slice(1).concat(articles.slice(9, 11)).slice(0, 3).map((a) => <ArticleCard article={a} />)}</div>
+  <!-- The Latest feed -->
+  <section class="section">
+    <div class="wrap">
+      <div class="rulehead"><h2>The Latest</h2><a class="more" href="/latest/">View all stories →</a></div>
+      <div class="feed">
+        {theLatest.map((a) => {
+          const s = sectionBySlug[sectionOf(a)];
+          const ph = a.data.image || articleImage(a.slug);
+          return (
+            <div class="row">
+              <a href={`/articles/${a.slug}/`} class:list={['thumb', { ph: !ph }]} style={`--dot:${s.color}`}>{ph && <img src={ph} alt={a.data.title} loading="lazy" />}</a>
+              <div>
+                <span class="cat-label" style={`--dot:${s.color}`}>{s.name}</span>
+                <h3><a href={`/articles/${a.slug}/`}>{a.data.title}</a></h3>
+                <p>{a.data.description}</p>
+                <div class="meta"><span>{fmtDate(a.data.date)}</span><span class="sep">·</span><span>{readingTime(a)} min read</span></div>
+              </div>
+            </div>
+          );
+        })}
       </div>
-    </section>
-  )}
+    </div>
+  </section>
+
+  <!-- Watch + Listen -->
+  <section class="section section-surface">
+    <div class="wrap">
+      <div class="rulehead"><h2>Watch + Listen</h2><a class="more" href="/watch/">All episodes →</a></div>
+      <div class="watch-grid">
+        {featEp && (
+          <div class="watch-lead">
+            <a href={`/episodes/${featEp.slug}/`} class="art">
+              {episodeImage(featEp.slug) && <img src={episodeImage(featEp.slug)} alt={featEp.data.title} />}
+              <span class="play"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></span>
+            </a>
+            <span class="cat-label" style="--dot:var(--purple);margin-top:14px">Video &amp; Podcast</span>
+            <h3><a href={`/episodes/${featEp.slug}/`} style="color:var(--text)">{featEp.data.title}</a></h3>
+            <p class="muted">{featEp.data.description}</p>
+          </div>
+        )}
+        <div class="watch-side">
+          {sideEps.map((e) => (
+            <a class="witem" href={`/episodes/${e.slug}/`}>
+              <div class="wthumb">{episodeImage(e.slug) && <img src={episodeImage(e.slug)} alt={e.data.title} />}</div>
+              <div><span class="cat-label" style="--dot:var(--purple)">Watch · Listen</span><h4>{e.data.title}</h4></div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Series -->
-  <section class="section section-dark">
+  <section class="section">
     <div class="wrap">
-      <div class="section-head"><span class="eyebrow">The Series</span><h2>Reporting in three tracks</h2>
-        <p>Beyond the daily file, our deeper work runs in three investigative series.</p></div>
-      <div class="grid grid-3">
+      <div class="rulehead"><h2>Sacred Intel Series</h2><a class="more" href="/series/disaster-files/">Explore →</a></div>
+      <div class="grid grid-3" style="background:none;border:none;gap:20px">
         {seriesList.map((s) => (
           <a class="series-card" href={`/series/${s.slug}/`} style={`--dot:${s.color}`}>
             <span class="eyebrow">Series</span><h3>{s.name}</h3><p>{s.blurb.split('—')[0]}</p><span class="arrow">→</span>
@@ -116,38 +190,8 @@ const leadPhoto = lead.data.image || articleImage(lead.slug);
     </div>
   </section>
 
-  <!-- Investigations -->
-  {investigations.length > 0 && (
-    <section class="section">
-      <div class="wrap">
-        <div class="head-row"><div><span class="eyebrow">Sacred Intel Investigations</span><h2 style="margin-top:8px">Go beyond the headline</h2></div><a class="btn btn-ghost btn-sm" href="/investigations/">All investigations →</a></div>
-        <div class="grid grid-3">{investigations.map((a) => <ArticleCard article={a} />)}</div>
-      </div>
-    </section>
-  )}
-
-  <!-- Podcast strip -->
-  <section class="section section-charcoal">
-    <div class="wrap">
-      <div class="podstrip">
-        <div>
-          <span class="eyebrow">The Sacred Intel Podcast</span>
-          <h2 style="font-size:clamp(1.6rem,3vw,2.3rem);margin:12px 0">The reporting, in audio</h2>
-          <p style="color:var(--d-text-2);margin:0 0 20px;max-width:42ch">Twenty-minute investigations into safety, science, engineering, and environmental health.</p>
-          <div style="margin-bottom:18px"><SubscribeLinks label={null} /></div>
-          <a href="/episodes/" class="btn btn-ghost">Browse all episodes →</a>
-        </div>
-        {featuredEp && (
-          <a href={`/episodes/${featuredEp.slug}/`} class="art">
-            {episodeImage(featuredEp.slug) ? <img src={episodeImage(featuredEp.slug)} alt={featuredEp.data.title} /> : null}
-          </a>
-        )}
-      </div>
-    </div>
-  </section>
-
-  <!-- Intel Brief newsletter -->
-  <section class="section" id="intel-brief">
-    <div class="wrap"><Newsletter title="Understand what's happening — and why" text="The Intel Brief: the week's most important developments in safety, environmental health, and infrastructure, with the context the headline leaves out. Free. No noise." /></div>
+  <!-- Intel Brief -->
+  <section class="section section-surface" id="intel-brief">
+    <div class="wrap"><Newsletter /></div>
   </section>
 </Base>

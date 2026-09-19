@@ -48,4 +48,6 @@ const articles = (await getCollection('articles', (a) => !a.data.draft)).sort(
     b.classList.add('active'); sec = b.dataset.section; apply();
   }));
   q.addEventListener('input', apply);
+  const qp = new URLSearchParams(location.search).get('q');
+  if (qp) { q.value = qp; apply(); }
 </script>

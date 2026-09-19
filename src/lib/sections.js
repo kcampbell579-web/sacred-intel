@@ -2,13 +2,14 @@
 // publication, separate from an article's "category" (News/Brief/Explainer…
 // which describes the format).
 export const SECTIONS = [
-  { slug: 'safety', name: 'Safety', blurb: 'Workplace and product safety — recalls, occupational hazards, and the failures behind preventable harm.' },
-  { slug: 'environment', name: 'Environment', blurb: 'Contamination, pollution, and the regulatory fights over air, water, and land.' },
-  { slug: 'health', name: 'Health', blurb: 'Exposure science, outbreaks, and the research linking the environment to human health.' },
-  { slug: 'infrastructure', name: 'Infrastructure', blurb: 'Energy, water systems, data centers, and the built environment under strain.' },
+  { slug: 'environment', name: 'Environment', color: '#4ea87a', blurb: 'Contamination, pollution, and the regulatory fights over air, water, and land.' },
+  { slug: 'health', name: 'Health', color: '#d1443e', blurb: 'Exposure science, outbreaks, and the research linking the environment to human health.' },
+  { slug: 'safety', name: 'Safety', color: '#e0a13a', blurb: 'Workplace and product safety — recalls, occupational hazards, and the failures behind preventable harm.' },
+  { slug: 'infrastructure', name: 'Infrastructure', color: '#5b8bd0', blurb: 'Energy, water systems, data centers, and the built environment under strain.' },
 ];
 
 export const sectionBySlug = Object.fromEntries(SECTIONS.map((s) => [s.slug, s]));
+export function sectionColor(slug) { return (sectionBySlug[slug] || {}).color || '#8b5cf6'; }
 export const nameToSlug = Object.fromEntries(SECTIONS.map((s) => [s.name, s.slug]));
 
 // Explicit subject assignment per article slug.

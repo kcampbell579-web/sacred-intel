@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EpisodeCard from '../components/EpisodeCard.astro';
+import SubscribeLinks from '../components/SubscribeLinks.astro';
+import { episodeImage } from '../lib/images.js';
+import { seriesList } from '../lib/series.js';
+
+const episodes = (await getCollection('episodes', (e) => !e.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const feat = episodes.find((e) => e.data.featured) || episodes[0];
+const rest = episodes.filter((e) => e.slug !== feat?.slug);
+const featPhoto = feat && episodeImage(feat.slug);
+---
+<Base title="Watch + Listen" description="Sacred Intel's reporting in video and audio — investigations, explainers, and the podcast.">
+  <section class="page-hero"><div class="wrap page-hero-inner">
+    <span class="eyebrow">Watch · Listen · Read</span>
+    <h1>Watch + Listen</h1>
+    <p>The reporting in audio and video — the same sourced investigations, in another format. New episodes weekly.</p>
+    <div style="margin-top:20px"><SubscribeLinks label="Subscribe" /></div>
+  </div></section>
+
+  {feat && (
+    <section class="section"><div class="wrap">
+      <div class="watch-grid">
+        <div class="watch-lead">
+          <a href={`/episodes/${feat.slug}/`} class="art">
+            {featPhoto && <img src={featPhoto} alt={feat.data.title} />}
+            <span class="play"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></span>
+          </a>
+          <span class="cat-label" style="--dot:var(--purple);margin-top:14px">Featured · Video &amp; Podcast</span>
+          <h3><a href={`/episodes/${feat.slug}/`} style="color:var(--text)">{feat.data.title}</a></h3>
+          <p class="muted">{feat.data.description}</p>
+          <a href={`/episodes/${feat.slug}/`} class="btn btn-primary btn-sm">Watch &amp; listen →</a>
+        </div>
+        <div class="watch-side">
+          {rest.slice(0, 4).map((e) => (
+            <a class="witem" href={`/episodes/${e.slug}/`}>
+              <div class="wthumb">{episodeImage(e.slug) && <img src={episodeImage(e.slug)} alt={e.data.title} />}</div>
+              <div><span class="cat-label" style="--dot:var(--purple)">Watch · Listen</span><h4>{e.data.title}</h4></div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div></section>
+  )}
+
+  <section class="section section-surface"><div class="wrap">
+    <div class="rulehead"><h2>All Episodes</h2><a class="more" href="/episodes/">Full archive →</a></div>
+    <div class="grid grid-3">{rest.slice(0, 6).map((e) => <EpisodeCard episode={e} />)}</div>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="rulehead"><h2>Sacred Intel Series</h2></div>
+    <div class="grid grid-3" style="background:none;border:none;gap:20px">
+      {seriesList.map((s) => (
+        <a class="series-card" href={`/series/${s.slug}/`} style={`--dot:${s.color}`}>
+          <span class="eyebrow">Series</span><h3>{s.name}</h3><p>{s.blurb.split('—')[0]}</p><span class="arrow">→</span>
+        </a>
+      ))}
+    </div>
+  </div></section>
+</Base>

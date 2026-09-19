@@ -3,54 +3,88 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import Newsletter from '../../components/Newsletter.astro';
+import { articleImage } from '../../lib/images.js';
+import { sectionOf, sectionBySlug } from '../../lib/sections.js';
+import { readingTime, fmtDateLong, iso } from '../../lib/format.js';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', (a) => !a.data.draft);
-  return articles.map((art) => ({
-    params: { slug: art.slug },
-    props: { art, all: articles },
-  }));
+  return articles.map((art) => ({ params: { slug: art.slug }, props: { art, all: articles } }));
 }
 
 const { art, all } = Astro.props;
 const { data } = art;
 const { Content } = await art.render();
-const date = data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+const sec = sectionBySlug[sectionOf(art)];
+const photo = data.image || articleImage(art.slug);
+const rt = readingTime(art);
+const [name, ...creds] = data.author.split(',');
+const cred = creds.join(',').trim();
+const initials = name.trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('');
 
 const related = all
-  .filter((a) => a.slug !== art.slug)
+  .filter((a) => a.slug !== art.slug && sectionOf(a) === sec.slug)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
----
-<Base title={data.title} description={data.description} type="article" image={data.image || '/favicon.svg'}>
-  <section class="page-hero">
-    <div class="wrap page-hero-inner" style="max-width:820px">
-      <a href="/latest/" class="backlink" style="color:var(--d-text-3);font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase">← All reporting</a>
-      <span class="chip" style="margin:16px 0 0">{data.category}</span>
-      <h1>{data.title}</h1>
-      <p class="meta" style="margin-top:16px">By {data.author} · {date}</p>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="wrap-narrow">
-      <article class="prose">
-        <p style="font-size:1.2rem;color:var(--ink-2)">{data.description}</p>
-        <hr />
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: data.title,
+  description: data.description,
+  datePublished: iso(data.date),
+  dateModified: iso(data.date),
+  articleSection: sec.name,
+  author: { '@type': 'Person', name: name.trim() },
+  publisher: { '@type': 'Organization', name: 'Sacred Intel' },
+  ...(photo ? { image: [new URL(photo, Astro.site).toString()] } : {}),
+  mainEntityOfPage: new URL(`/articles/${art.slug}/`, Astro.site).toString(),
+};
+---
+<Base title={data.title} description={data.description} type="article" image={photo || '/og-default.jpg'} jsonld={jsonld}>
+  <article>
+    <div class="article-head">
+      <div class="article-head-inner">
+        <a href={`/section/${sec.slug}/`}><span class="cat-label" style={`--dot:${sec.color}`}>{sec.name}</span></a>
+        <h1>{data.title}</h1>
+        <p class="deck">{data.description}</p>
+        <div class="byline">
+          <span class="avatar">{initials}</span>
+          <span class="who">
+            <b>By {name.trim()}</b>{cred && <span> · {cred}</span>}<br />
+            <span>{fmtDateLong(data.date)} · {rt} min read</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {photo && (
+      <div class="article-hero-img">
+        <img src={photo} alt={data.title} />
+      </div>
+    )}
+
+    <div class="article-body">
+      <div class="toolbar">
+        <button id="shareBtn">Share</button>
+        <button id="saveBtn">Save</button>
+        <button id="printBtn">Print</button>
+      </div>
+      <div class="prose">
         <Content />
-      </article>
+      </div>
       {data.topics.length > 0 && (
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:32px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:30px">
           {data.topics.map((t) => <span class="chip">{t}</span>)}
         </div>
       )}
     </div>
-  </section>
+  </article>
 
   {related.length > 0 && (
-    <section class="section section-paper">
+    <section class="section section-surface">
       <div class="wrap">
-        <div class="head-row"><h2>More Intel</h2><a href="/latest/" class="btn btn-ghost btn-sm">All reporting →</a></div>
+        <div class="rulehead"><h2>More from {sec.name}</h2><a class="more" href={`/section/${sec.slug}/`}>All {sec.name} →</a></div>
         <div class="grid grid-3">{related.map((a) => <ArticleCard article={a} />)}</div>
       </div>
     </section>
@@ -58,3 +92,25 @@ const related = all
 
   <section class="section"><div class="wrap"><Newsletter /></div></section>
 </Base>
+
+<script>
+  const t = document.title;
+  document.getElementById('shareBtn')?.addEventListener('click', async () => {
+    const url = location.href;
+    if (navigator.share) { try { await navigator.share({ title: t, url }); } catch (_) {} }
+    else { try { await navigator.clipboard.writeText(url); const b = document.getElementById('shareBtn'); b.textContent = 'Link copied'; setTimeout(() => (b.textContent = 'Share'), 1800); } catch (_) {} }
+  });
+  document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+  document.getElementById('saveBtn')?.addEventListener('click', () => {
+    const b = document.getElementById('saveBtn');
+    try {
+      const key = 'si-saved';
+      const saved = JSON.parse(localStorage.getItem(key) || '[]');
+      const url = location.pathname;
+      const has = saved.includes(url);
+      const next = has ? saved.filter((x) => x !== url) : [...saved, url];
+      localStorage.setItem(key, JSON.stringify(next));
+      b.textContent = has ? 'Save' : 'Saved ✓';
+    } catch (_) { b.textContent = 'Saved ✓'; }
+  });
+</script>
