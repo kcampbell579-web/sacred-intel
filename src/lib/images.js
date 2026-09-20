@@ -7,11 +7,16 @@ import path from 'node:path';
 // components can fall back to generated cover art.
 const PUB = path.resolve('public');
 const EXTS = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
+// Accepts <slug>.jpg or a size-suffixed 16:9 file (<slug>-1600x900.jpg etc.),
+// so images exported from the shot-list drop straight in.
+const SUFFIXES = ['', '-1600x900', '-1920x1080', '-16x9'];
 
 function findIn(dir, slug) {
-  for (const e of EXTS) {
-    const rel = `img/${dir}/${slug}.${e}`;
-    if (fs.existsSync(path.join(PUB, rel))) return '/' + rel;
+  for (const suf of SUFFIXES) {
+    for (const e of EXTS) {
+      const rel = `img/${dir}/${slug}${suf}.${e}`;
+      if (fs.existsSync(path.join(PUB, rel))) return '/' + rel;
+    }
   }
   return null;
 }
