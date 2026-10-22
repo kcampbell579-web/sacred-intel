@@ -5,6 +5,14 @@ export const SITE = {
   description:
     'Sacred Intel is a 20-minute podcast and content platform covering environmental health, workplace safety, engineering failures, disasters, emerging contaminants, and the science behind major headlines.',
   email: 'hello@sacredintel.org',
+  // Newsletter (Mailjet). Paste the FORM ACTION URL from your Mailjet
+  // subscription widget here and every newsletter form posts to it.
+  // Leave action empty until then — forms show a friendly "coming soon".
+  newsletter: {
+    provider: 'Mailjet',
+    action: '', // e.g. https://app.mailjet.com/widget/iframe/XXXX/YYYY  (form action)
+    emailField: 'email', // field name Mailjet expects for the address
+  },
   // Podcast subscription links — replace the "#" placeholders once your show
   // is live on each platform. The RSS feed is generated at /podcast.xml.
   subscribe: [

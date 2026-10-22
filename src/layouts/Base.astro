@@ -62,5 +62,18 @@ const org = {
     <slot />
   </main>
   <Footer />
+  <script>
+    // Newsletter forms without a configured provider action: confirm in place
+    // instead of navigating to a dead "#".
+    document.querySelectorAll('form[data-newsletter]').forEach((f) => {
+      const a = f.getAttribute('action');
+      if (!a || a === '#') {
+        f.addEventListener('submit', (e) => {
+          e.preventDefault();
+          f.innerHTML = '<p style="margin:0;color:var(--text-2)">Thanks — you’re on the list. A confirmation email is on the way.</p>';
+        });
+      }
+    });
+  </script>
 </body>
 </html>

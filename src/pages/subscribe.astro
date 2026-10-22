@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site.js';
+const action = SITE.newsletter?.action || '#';
+const field = SITE.newsletter?.emailField || 'email';
+---
+<Base title="Subscribe" description="Subscribe to The Intel Brief — Sacred Intel's free newsletter on environmental health, public safety, and the science behind the headlines.">
+  <section class="page-hero"><div class="wrap page-hero-inner" style="max-width:760px;text-align:center;margin:0 auto">
+    <span class="eyebrow">The Intel Brief</span>
+    <h1 style="max-width:18ch;margin-inline:auto">Get the stories that matter.</h1>
+    <p style="margin-inline:auto">Independent reporting, data updates, and new investigations on environmental health and public safety — straight to your inbox. Free. No noise.</p>
+    <form class="sub-form" data-newsletter action={action} method="post" novalidate>
+      <input type="email" name={field} placeholder="you@email.com" aria-label="Email address" required />
+      <button type="submit" class="btn btn-primary btn-lg">Subscribe free</button>
+    </form>
+    <p class="finenote">One email when it matters. Unsubscribe anytime. We never sell your data.</p>
+  </div></section>
+
+  <section class="section"><div class="wrap">
+    <div class="rulehead"><h2>What you'll get</h2></div>
+    <div class="grid grid-3" style="background:none;border:none;gap:20px">
+      <div class="subperk"><span class="n">01</span><h3>The week's real story</h3><p>The developments that actually matter in environment, health, safety, and infrastructure — with the context the news cycle skips.</p></div>
+      <div class="subperk"><span class="n">02</span><h3>Sourced, not hyped</h3><p>Every claim traces back to primary records and research. No fear-mongering, no filler.</p></div>
+      <div class="subperk"><span class="n">03</span><h3>Tools &amp; data first</h3><p>New investigations and data tools — like area contamination lookups — land in your inbox before anywhere else.</p></div>
+    </div>
+  </div></div></section>
+</Base>
+
+<style>
+  .sub-form { display: flex; gap: 10px; max-width: 480px; margin: 26px auto 10px; flex-wrap: wrap; }
+  .sub-form input { flex: 1; min-width: 220px; }
+  .finenote { color: var(--text-3); font-size: 0.85rem; margin: 0 auto; }
+  .subperk { border: 1px solid var(--line); border-top: 3px solid var(--purple); border-radius: var(--radius-sm); padding: 24px; background: var(--surface-2); }
+  .subperk .n { font-family: var(--serif); font-weight: 700; color: var(--purple); font-size: 1.1rem; }
+  .subperk h3 { font-size: 1.2rem; margin: 8px 0 8px; }
+  .subperk p { color: var(--text-2); font-size: 0.95rem; margin: 0; line-height: 1.55; }
+</style>
