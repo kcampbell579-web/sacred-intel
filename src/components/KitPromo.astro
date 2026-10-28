@@ -1,83 +1,80 @@
 ---
-// House promo for Sacred Sampling Solutions test kits — styled as a bright,
-// branded ad block (Sacred Sampling blue) that stands out on the dark site.
+// House ad for Sacred Sampling Solutions, styled after the "Sacred Charge"
+// brand creative: white lead with family photo + navy PROTECT/TEST/KNOW/CARE
+// band. Shown on the dark Sacred Intel site as a bright branded ad block.
 const { compact = false } = Astro.props;
 const url =
   'https://www.sacredsamplingsolutions.com/kits.html?utm_source=sacredintel&utm_medium=house_ad&utm_campaign=test_kits';
 
-const S = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
-const ICONS = {
-  drop: `<svg ${S}><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>`,
-  air: `<svg ${S}><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h15a3 3 0 1 1-3 3"/><path d="M3 16h9"/></svg>`,
-  spark: `<svg ${S}><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/></svg>`,
-  flask: `<svg ${S}><path d="M9 3h6"/><path d="M10 3v5l-4.6 8.3A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.8-3.7L14 8V3"/></svg>`,
-  cert: `<svg ${S}><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h5"/><path d="M8.5 16.5l1.5 1.5 3-3"/></svg>`,
-};
-
-const caps = [
-  { label: 'Water Testing', icon: 'drop' },
-  { label: 'Air Testing', icon: 'air' },
-  { label: 'Surface & Dust', icon: 'spark' },
-  { label: 'Chemicals & Toxins', icon: 'flask' },
-  { label: 'Certified Lab Results', icon: 'cert' },
+const S = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+const pillars = [
+  { t: 'Protect', d: 'Your home. Your health. Your peace of mind.',
+    svg: `<svg ${S}><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"/><path d="M9.4 12.3l1.8 1.8 3.4-3.8"/></svg>` },
+  { t: 'Test', d: 'Professional laboratory analysis you can trust.',
+    svg: `<svg ${S}><path d="M9 3h6"/><path d="M10 3v5l-4.6 8.3A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.8-3.7L14 8V3"/></svg>` },
+  { t: 'Know', d: 'Clear, easy-to-understand results that empower you.',
+    svg: `<svg ${S}><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 9h8M8 13h5"/><path d="M8.5 17l1.4 1.4 2.8-2.8"/></svg>` },
+  { t: 'Care', d: 'For the people who matter most.',
+    svg: `<svg ${S}><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.1"/><path d="M3.5 19.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M15.5 19.5c0-1.8 1-3.3 3-3.3"/></svg>` },
 ];
 ---
-<aside class:list={['kp', { compact }]}>
-  <div class="kp-main">
-    <div class="kp-copy">
-      <span class="kp-eyebrow">Test your home</span>
+<aside class:list={['sc', { compact }]}>
+  <div class="sc-top">
+    <div class="sc-copy">
+      <span class="sc-brand">Sacred Sampling Solutions <i>· Science. Service. Protection.</i></span>
       <h2>Know what's in <span>your home.</span></h2>
-      <p>Sacred Sampling Solutions delivers certified-lab test kits for water, air, dust, surfaces and more — straight to your door. Collect a sample, mail it back, and get real results you can trust.</p>
-      <a class="kp-btn" href={url} target="_blank" rel="noopener sponsored">Order a test kit →</a>
+      <p>Certified-lab test kits for water, air, dust and surfaces — delivered to your door. Collect a sample, mail it back, and get answers you can trust.</p>
+      <a class="sc-btn" href={url} target="_blank" rel="noopener sponsored">Order a test kit →</a>
+      <p class="sc-disc">Disclosure: Sacred Intel's founder operates Sacred Sampling Solutions.</p>
     </div>
-    <div class="kp-photo">
-      <img src="/img/sss-kit-wipe.jpg" alt="Sacred Sampling Solutions surface dust test kit in use" loading="lazy" />
+    <div class="sc-photo">
+      <img src="/img/sss-kit-family.webp" alt="A family testing their tap water with a Sacred Sampling Solutions kit" loading="lazy" />
     </div>
   </div>
 
-  <div class="kp-caps">
-    {caps.map((c) => (
-      <div class="kp-cap">
-        <span class="kp-ic" set:html={ICONS[c.icon]} />
-        <span>{c.label}</span>
+  <div class="sc-band">
+    {pillars.map((p) => (
+      <div class="sc-pillar">
+        <span class="sc-ic" set:html={p.svg} />
+        <div><b>{p.t}</b><span>{p.d}</span></div>
       </div>
     ))}
   </div>
-
-  <p class="kp-disc">Disclosure: Sacred Intel's founder operates Sacred Sampling Solutions.</p>
 </aside>
 
 <style>
-  .kp {
-    --b: #2563eb; --b-dark: #1d4ed8; --ink: #0f172a; --ink2: #475569; --line: #e3eaf3;
-    background: #ffffff;
-    border: 1px solid #e3eaf3;
-    border-radius: 20px;
-    padding: 36px;
-    color: var(--ink);
-    box-shadow: 0 20px 50px -24px rgba(15, 23, 42, 0.5);
+  .sc {
+    --nv: #10233f; --nv2: #16305a; --b: #2563eb; --tl: #38b2c4; --gd: #c99a3a;
+    --ink: #0f172a; --ink2: #475569;
+    border-radius: 18px; overflow: hidden; border: 1px solid #e3eaf3;
+    box-shadow: 0 22px 54px -26px rgba(15, 23, 42, 0.6);
   }
-  .kp.compact { padding: 26px; border-radius: 16px; }
-  .kp-main { display: grid; grid-template-columns: 1fr 0.82fr; gap: 36px; align-items: center; }
-  @media (max-width: 760px) { .kp-main { grid-template-columns: 1fr; gap: 22px; } .kp { padding: 24px; } }
+  .sc-top { background: #fff; display: grid; grid-template-columns: 1.12fr 0.88fr; gap: 0; align-items: stretch; }
+  @media (max-width: 760px) { .sc-top { grid-template-columns: 1fr; } }
+  .sc-copy { padding: 36px; }
+  .compact .sc-copy { padding: 26px; }
+  .sc-brand { font-family: var(--sans); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--nv); }
+  .sc-brand i { color: var(--gd); font-style: normal; font-weight: 700; }
+  .sc h2 { font-family: var(--sans); font-weight: 800; font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1.03; letter-spacing: -0.02em; color: var(--nv); margin: 12px 0 14px; }
+  .sc h2 span { color: var(--b); }
+  .compact .sc h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+  .sc p { font-family: var(--sans); color: var(--ink2); font-size: 1.02rem; line-height: 1.55; margin: 0 0 22px; max-width: 42ch; }
+  .sc-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--b); color: #fff; font-family: var(--sans); font-weight: 700; font-size: 1.02rem; padding: 0.85em 1.7em; border-radius: 12px; }
+  .sc-btn:hover { background: var(--nv); color: #fff; }
+  .sc-disc { font-size: 0.76rem !important; color: #94a3b8 !important; margin: 16px 0 0 !important; }
 
-  .kp-eyebrow { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--b); }
-  .kp h2 { font-family: var(--sans); font-weight: 800; font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1.04; letter-spacing: -0.02em; color: var(--ink); margin: 12px 0 14px; }
-  .kp h2 span { color: var(--b); }
-  .kp.compact h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
-  .kp p { font-family: var(--sans); color: var(--ink2); font-size: 1.02rem; line-height: 1.55; margin: 0 0 22px; max-width: 42ch; }
-  .kp-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--b); color: #fff; font-family: var(--sans); font-weight: 700; font-size: 1.02rem; padding: 0.85em 1.7em; border-radius: 12px; }
-  .kp-btn:hover { background: var(--b-dark); color: #fff; }
+  .sc-photo { position: relative; min-height: 260px; }
+  .sc-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  @media (max-width: 760px) { .sc-photo { min-height: 220px; order: -1; } }
 
-  .kp-photo { align-self: stretch; }
-  .kp-photo img { width: 100%; height: 100%; min-height: 240px; max-height: 340px; object-fit: cover; border-radius: 14px; }
-  @media (max-width: 760px) { .kp-photo img { max-height: 220px; } }
-
-  .kp-caps { display: flex; flex-wrap: wrap; gap: 14px 26px; align-items: center; margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--line); }
-  .kp.compact .kp-caps { display: none; }
-  .kp-cap { display: inline-flex; align-items: center; gap: 9px; font-family: var(--sans); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #334155; }
-  .kp-ic { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #eaf1fe; color: var(--b); }
-  .kp-ic :global(svg) { width: 16px; height: 16px; }
-
-  .kp-disc { font-family: var(--sans); color: #94a3b8; font-size: 0.78rem; margin: 18px 0 0; }
+  .sc-band { background: var(--nv); display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; }
+  .compact .sc-band { display: none; }
+  @media (max-width: 760px) { .sc-band { grid-template-columns: 1fr 1fr; } }
+  .sc-pillar { display: flex; gap: 12px; padding: 22px 24px; align-items: flex-start; background: var(--nv); position: relative; }
+  .sc-pillar + .sc-pillar::before { content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 1px; background: rgba(255,255,255,0.12); }
+  @media (max-width: 760px) { .sc-pillar + .sc-pillar::before { display: none; } }
+  .sc-ic { flex: none; display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.3); color: var(--tl); }
+  .sc-ic :global(svg) { width: 20px; height: 20px; }
+  .sc-pillar b { display: block; font-family: var(--sans); font-size: 0.82rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tl); margin-bottom: 4px; }
+  .sc-pillar span { display: block; font-family: var(--sans); font-size: 0.82rem; line-height: 1.45; color: #cbd5e1; }
 </style>
