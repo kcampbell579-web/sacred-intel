@@ -155,4 +155,26 @@ const trust = [
     .sc-right img { position: relative; height: 300px; }
   }
   @media (max-width: 480px) { .sc-right, .sc-right img { min-height: 230px; height: 230px; } }
+
+  /* Compact phone layout — fit the ad within a single screen */
+  @media (max-width: 560px) {
+    .sc-left { padding: 18px 22px 18px; }
+    .sc-right, .sc-right img { min-height: 130px; height: 130px; }
+    .sc-right img { object-position: center 55%; }
+    .sc-head { margin-bottom: 12px; gap: 14px; }
+    .sc-logo { height: 38px; }
+    .sc-tag { font-size: 0.6rem; padding-left: 12px; line-height: 1.4; }
+    .sc h2 { font-size: 1.6rem; margin: 2px 0 10px; }
+    .sc p { font-size: 0.88rem; line-height: 1.38; margin: 0 0 14px; }
+    .sc-caps { grid-template-columns: repeat(2, 1fr); gap: 12px 14px; margin: 0 0 14px; }
+    .sc-ic { width: 40px; height: 40px; margin-bottom: 6px; }
+    .sc-ic :global(svg) { width: 20px; height: 20px; }
+    .sc-cap b { font-size: 0.72rem; }
+    .sc-cap .d { display: none; }
+    .sc-btn { font-size: 0.98rem; padding: 0.76em 1.5em; box-shadow: 0 10px 22px -12px rgba(47,111,237,0.7); }
+    .sc-trust { grid-template-columns: 1fr 1fr; gap: 10px 0; margin-top: 12px; padding-top: 12px; }
+    .sc-ti :global(svg) { width: 18px; height: 18px; }
+    .sc-ti span:last-child { font-size: 0.64rem; }
+    .sc-disc { font-size: 0.64rem !important; margin: 10px 0 0 !important; }
+  }
 </style>
