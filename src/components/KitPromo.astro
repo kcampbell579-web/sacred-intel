@@ -49,7 +49,7 @@ const pillars = [
     border-radius: 18px; overflow: hidden; border: 1px solid #e3eaf3;
     box-shadow: 0 22px 54px -26px rgba(15, 23, 42, 0.6);
   }
-  .sc-top { background: #fff; display: grid; grid-template-columns: 1.12fr 0.88fr; gap: 0; align-items: stretch; }
+  .sc-top { background: #fff; display: grid; grid-template-columns: 1.12fr 0.9fr; gap: 0; align-items: center; }
   @media (max-width: 760px) { .sc-top { grid-template-columns: 1fr; } }
   .sc-copy { padding: 36px; }
   .compact .sc-copy { padding: 26px; }
@@ -63,9 +63,9 @@ const pillars = [
   .sc-btn:hover { background: var(--nv); color: #fff; }
   .sc-disc { font-size: 0.76rem !important; color: #94a3b8 !important; margin: 16px 0 0 !important; }
 
-  .sc-photo { position: relative; min-height: 260px; }
-  .sc-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  @media (max-width: 760px) { .sc-photo { min-height: 220px; order: -1; } }
+  .sc-photo { display: flex; align-items: center; justify-content: center; padding: 18px; }
+  .sc-photo img { width: 100%; height: auto; display: block; border-radius: 10px; }
+  @media (max-width: 760px) { .sc-photo { order: -1; padding: 18px 18px 0; } }
 
   .sc-band { background: var(--nv); display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; }
   .compact .sc-band { display: none; }
