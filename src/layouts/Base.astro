@@ -104,7 +104,7 @@ const org = {
           });
           const data = await r.json().catch(() => ({}));
           if (r.ok && data.ok) {
-            f.innerHTML = '<p style="margin:0;color:var(--text-2)">Thanks — you’re on the list. Check your inbox to confirm.</p>';
+            f.innerHTML = '<p style="margin:0;color:var(--text-2)">Thanks — you’re on the list. Watch for The Intel Brief in your inbox.</p>';
             if (SUB_CONVERSION && typeof window.gtag === 'function') {
               window.gtag('event', 'conversion', { send_to: SUB_CONVERSION });
             }
