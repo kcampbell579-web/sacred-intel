@@ -6,6 +6,7 @@ import Newsletter from '../../components/Newsletter.astro';
 import { articleImage } from '../../lib/images.js';
 import { sectionOf, sectionBySlug } from '../../lib/sections.js';
 import { readingTime, fmtDateLong, iso } from '../../lib/format.js';
+import KitPromo from '../../components/KitPromo.astro';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles', (a) => !a.data.draft);
@@ -80,6 +81,8 @@ const jsonld = {
       )}
     </div>
   </article>
+
+  <section class="section-sm"><div class="wrap-narrow"><KitPromo compact={true} /></div></section>
 
   {related.length > 0 && (
     <section class="section section-surface">

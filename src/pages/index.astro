@@ -7,6 +7,7 @@ import { articleImage, episodeImage } from '../lib/images.js';
 import { sectionOf, sectionBySlug, isInvestigation, SECTIONS } from '../lib/sections.js';
 import { readingTime, fmtDate, fmtDateLong } from '../lib/format.js';
 import { seriesList } from '../lib/series.js';
+import KitPromo from '../components/KitPromo.astro';
 
 const articles = (await getCollection('articles', (a) => !a.data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -123,6 +124,9 @@ const tools = [
       </div>
     </div>
   </section>
+
+  <!-- Test-kit promo -->
+  <section class="section"><div class="wrap"><KitPromo /></div></section>
 
   <!-- The Latest feed -->
   <section class="section">

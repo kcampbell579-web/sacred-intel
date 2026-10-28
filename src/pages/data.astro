@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import KitPromo from '../components/KitPromo.astro';
 ---
 <Base title="Data & Tools" description="Search your ZIP code for local air quality and the official records on drinking water, Superfund sites, and industrial facilities near you.">
   <section class="page-hero"><div class="wrap page-hero-inner">
@@ -19,6 +20,7 @@ import Base from '../layouts/Base.astro';
       <div class="rulehead"><h2>Public records, one search</h2></div>
       <div class="grid grid-3" id="tools" style="background:none;border:none;gap:16px"></div>
     </div>
+    <div style="margin:36px 0 0"><KitPromo heading="Check your area, then test your home." /></div>
     <p class="disclaimer">Data comes from public sources (Open-Meteo air quality, U.S. EPA, EWG). Live readings are modeled estimates for the ZIP's center point — not a substitute for an official advisory or a certified test. Confirm with your water utility or local health department. Sacred Intel stores nothing you enter here.</p>
   </div></section>
 </Base>

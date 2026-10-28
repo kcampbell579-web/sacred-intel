@@ -1,0 +1,33 @@
+---
+// House promo: drives readers to order a test kit from Sacred Sampling
+// Solutions. Transparently labeled (Sacred Intel's founder operates the lab).
+const {
+  compact = false,
+  heading = "Worried about what's in your own water or air?",
+} = Astro.props;
+const url =
+  'https://www.sacredsamplingsolutions.com/kits.html?utm_source=sacredintel&utm_medium=house_ad&utm_campaign=test_kits';
+---
+<aside class:list={['kitpromo', { compact }]}>
+  <div class="kp-inner">
+    <span class="kp-label">Test your home</span>
+    <h3>{heading}</h3>
+    <p>Sacred Sampling Solutions sends <strong>certified-lab test kits</strong> — PFAS, lead, heavy metals, bacteria and more — straight to your door. Collect a sample, mail it back, get real lab results.</p>
+    <a class="kp-btn" href={url} target="_blank" rel="noopener sponsored">Order a test kit →</a>
+    <p class="kp-disc">Disclosure: Sacred Intel's founder operates Sacred Sampling Solutions.</p>
+  </div>
+</aside>
+
+<style>
+  .kitpromo { border: 1px solid var(--line); border-left: 3px solid var(--purple); border-radius: var(--radius); background: var(--surface-2); overflow: hidden; }
+  .kp-inner { padding: 28px; }
+  .kitpromo.compact .kp-inner { padding: 22px; }
+  .kp-label { font-family: var(--sans); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--purple-2); }
+  .kitpromo h3 { font-family: var(--serif); font-size: 1.5rem; line-height: 1.12; margin: 10px 0 10px; max-width: 24ch; }
+  .kitpromo.compact h3 { font-size: 1.2rem; }
+  .kitpromo p { color: var(--text-2); font-size: 1rem; line-height: 1.55; margin: 0 0 18px; max-width: 54ch; }
+  .kitpromo.compact p { font-size: 0.92rem; }
+  .kp-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--purple); color: #fff; font-family: var(--sans); font-weight: 600; font-size: 0.95rem; padding: 0.75em 1.4em; border-radius: var(--radius-sm); }
+  .kp-btn:hover { background: var(--purple-ink); color: #fff; }
+  .kp-disc { font-size: 0.78rem !important; color: var(--text-3) !important; margin: 14px 0 0 !important; }
+</style>
