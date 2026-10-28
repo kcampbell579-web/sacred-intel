@@ -74,16 +74,47 @@ const org = {
   </main>
   <Footer />
   <script>
-    // Newsletter forms without a configured provider action: confirm in place
-    // instead of navigating to a dead "#".
+    // Newsletter signup → POST to our /api/subscribe function, which adds the
+    // address to a Mailjet contact list. Confirms (or shows an error) in place,
+    // with no page reload. Falls back to a native POST if JS is unavailable.
+    // To count subscribes as a Google Ads conversion, paste your conversion
+    // label below, e.g. 'AW-18453981424/AbCdEfG...'.
+    const SUB_CONVERSION = '';
     document.querySelectorAll('form[data-newsletter]').forEach((f) => {
-      const a = f.getAttribute('action');
-      if (!a || a === '#') {
-        f.addEventListener('submit', (e) => {
-          e.preventDefault();
-          f.innerHTML = '<p style="margin:0;color:var(--text-2)">Thanks — you’re on the list. A confirmation email is on the way.</p>';
-        });
-      }
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = f.querySelector('input[type="email"]');
+        const email = (input && input.value || '').trim();
+        const btn = f.querySelector('button');
+        if (!email) { input && input.focus(); return; }
+        const endpoint = f.getAttribute('action') || '/api/subscribe';
+        const orig = btn ? btn.textContent : '';
+        if (btn) { btn.disabled = true; btn.textContent = 'Subscribing…'; }
+        const fail = (msg) => {
+          if (btn) { btn.disabled = false; btn.textContent = orig; }
+          let m = f.querySelector('.nl-err');
+          if (!m) { m = document.createElement('p'); m.className = 'nl-err'; m.style.cssText = 'margin:10px 0 0;color:#f2a59d;font-size:0.85rem'; f.appendChild(m); }
+          m.textContent = msg;
+        };
+        try {
+          const r = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          const data = await r.json().catch(() => ({}));
+          if (r.ok && data.ok) {
+            f.innerHTML = '<p style="margin:0;color:var(--text-2)">Thanks — you’re on the list. Check your inbox to confirm.</p>';
+            if (SUB_CONVERSION && typeof window.gtag === 'function') {
+              window.gtag('event', 'conversion', { send_to: SUB_CONVERSION });
+            }
+          } else {
+            fail((data && data.error) || 'That didn’t go through. Please try again.');
+          }
+        } catch (_) {
+          fail('Network error — please try again.');
+        }
+      });
     });
   </script>
 </body>

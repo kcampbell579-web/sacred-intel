@@ -5,13 +5,14 @@ export const SITE = {
   description:
     'Sacred Intel is a 20-minute podcast and content platform covering environmental health, workplace safety, engineering failures, disasters, emerging contaminants, and the science behind major headlines.',
   email: 'hello@sacredintel.org',
-  // Newsletter (Mailjet). Paste the FORM ACTION URL from your Mailjet
-  // subscription widget here and every newsletter form posts to it.
-  // Leave action empty until then — forms show a friendly "coming soon".
+  // Newsletter (Mailjet). Every form posts to our own /api/subscribe
+  // serverless function, which adds the address to a Mailjet contact list.
+  // Set MJ_APIKEY_PUBLIC / MJ_APIKEY_PRIVATE (and optionally MAILJET_LIST_ID
+  // or MAILJET_LIST_NAME) in Vercel → Settings → Environment Variables.
   newsletter: {
     provider: 'Mailjet',
-    action: '', // e.g. https://app.mailjet.com/widget/iframe/XXXX/YYYY  (form action)
-    emailField: 'email', // field name Mailjet expects for the address
+    action: '/api/subscribe', // our serverless endpoint
+    emailField: 'email',
   },
   // Podcast subscription links — replace the "#" placeholders once your show
   // is live on each platform. The RSS feed is generated at /podcast.xml.
