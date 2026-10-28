@@ -1,33 +1,83 @@
 ---
-// House promo: drives readers to order a test kit from Sacred Sampling
-// Solutions. Transparently labeled (Sacred Intel's founder operates the lab).
-const {
-  compact = false,
-  heading = "Worried about what's in your own water or air?",
-} = Astro.props;
+// House promo for Sacred Sampling Solutions test kits — styled as a bright,
+// branded ad block (Sacred Sampling blue) that stands out on the dark site.
+const { compact = false } = Astro.props;
 const url =
   'https://www.sacredsamplingsolutions.com/kits.html?utm_source=sacredintel&utm_medium=house_ad&utm_campaign=test_kits';
+
+const S = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+const ICONS = {
+  drop: `<svg ${S}><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>`,
+  air: `<svg ${S}><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h15a3 3 0 1 1-3 3"/><path d="M3 16h9"/></svg>`,
+  spark: `<svg ${S}><path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/></svg>`,
+  flask: `<svg ${S}><path d="M9 3h6"/><path d="M10 3v5l-4.6 8.3A2 2 0 0 0 7.2 20h9.6a2 2 0 0 0 1.8-3.7L14 8V3"/></svg>`,
+  cert: `<svg ${S}><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h5"/><path d="M8.5 16.5l1.5 1.5 3-3"/></svg>`,
+};
+
+const caps = [
+  { label: 'Water Testing', icon: 'drop' },
+  { label: 'Air Testing', icon: 'air' },
+  { label: 'Surface & Dust', icon: 'spark' },
+  { label: 'Chemicals & Toxins', icon: 'flask' },
+  { label: 'Certified Lab Results', icon: 'cert' },
+];
 ---
-<aside class:list={['kitpromo', { compact }]}>
-  <div class="kp-inner">
-    <span class="kp-label">Test your home</span>
-    <h3>{heading}</h3>
-    <p>Sacred Sampling Solutions sends <strong>certified-lab test kits</strong> — PFAS, lead, heavy metals, bacteria and more — straight to your door. Collect a sample, mail it back, get real lab results.</p>
-    <a class="kp-btn" href={url} target="_blank" rel="noopener sponsored">Order a test kit →</a>
-    <p class="kp-disc">Disclosure: Sacred Intel's founder operates Sacred Sampling Solutions.</p>
+<aside class:list={['kp', { compact }]}>
+  <div class="kp-main">
+    <div class="kp-copy">
+      <span class="kp-eyebrow">Test your home</span>
+      <h2>Know what's in <span>your home.</span></h2>
+      <p>Sacred Sampling Solutions delivers certified-lab test kits for water, air, dust, surfaces and more — straight to your door. Collect a sample, mail it back, and get real results you can trust.</p>
+      <a class="kp-btn" href={url} target="_blank" rel="noopener sponsored">Order a test kit →</a>
+    </div>
+    <div class="kp-photo">
+      <img src="/img/sss-kit-wipe.jpg" alt="Sacred Sampling Solutions surface dust test kit in use" loading="lazy" />
+    </div>
   </div>
+
+  <div class="kp-caps">
+    {caps.map((c) => (
+      <div class="kp-cap">
+        <span class="kp-ic" set:html={ICONS[c.icon]} />
+        <span>{c.label}</span>
+      </div>
+    ))}
+  </div>
+
+  <p class="kp-disc">Disclosure: Sacred Intel's founder operates Sacred Sampling Solutions.</p>
 </aside>
 
 <style>
-  .kitpromo { border: 1px solid var(--line); border-left: 3px solid var(--purple); border-radius: var(--radius); background: var(--surface-2); overflow: hidden; }
-  .kp-inner { padding: 28px; }
-  .kitpromo.compact .kp-inner { padding: 22px; }
-  .kp-label { font-family: var(--sans); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--purple-2); }
-  .kitpromo h3 { font-family: var(--serif); font-size: 1.5rem; line-height: 1.12; margin: 10px 0 10px; max-width: 24ch; }
-  .kitpromo.compact h3 { font-size: 1.2rem; }
-  .kitpromo p { color: var(--text-2); font-size: 1rem; line-height: 1.55; margin: 0 0 18px; max-width: 54ch; }
-  .kitpromo.compact p { font-size: 0.92rem; }
-  .kp-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--purple); color: #fff; font-family: var(--sans); font-weight: 600; font-size: 0.95rem; padding: 0.75em 1.4em; border-radius: var(--radius-sm); }
-  .kp-btn:hover { background: var(--purple-ink); color: #fff; }
-  .kp-disc { font-size: 0.78rem !important; color: var(--text-3) !important; margin: 14px 0 0 !important; }
+  .kp {
+    --b: #2563eb; --b-dark: #1d4ed8; --ink: #0f172a; --ink2: #475569; --line: #e3eaf3;
+    background: #ffffff;
+    border: 1px solid #e3eaf3;
+    border-radius: 20px;
+    padding: 36px;
+    color: var(--ink);
+    box-shadow: 0 20px 50px -24px rgba(15, 23, 42, 0.5);
+  }
+  .kp.compact { padding: 26px; border-radius: 16px; }
+  .kp-main { display: grid; grid-template-columns: 1fr 0.82fr; gap: 36px; align-items: center; }
+  @media (max-width: 760px) { .kp-main { grid-template-columns: 1fr; gap: 22px; } .kp { padding: 24px; } }
+
+  .kp-eyebrow { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--b); }
+  .kp h2 { font-family: var(--sans); font-weight: 800; font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1.04; letter-spacing: -0.02em; color: var(--ink); margin: 12px 0 14px; }
+  .kp h2 span { color: var(--b); }
+  .kp.compact h2 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+  .kp p { font-family: var(--sans); color: var(--ink2); font-size: 1.02rem; line-height: 1.55; margin: 0 0 22px; max-width: 42ch; }
+  .kp-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--b); color: #fff; font-family: var(--sans); font-weight: 700; font-size: 1.02rem; padding: 0.85em 1.7em; border-radius: 12px; }
+  .kp-btn:hover { background: var(--b-dark); color: #fff; }
+
+  .kp-photo { align-self: stretch; }
+  .kp-photo img { width: 100%; height: 100%; min-height: 240px; max-height: 340px; object-fit: cover; border-radius: 14px; }
+  @media (max-width: 760px) { .kp-photo img { max-height: 220px; } }
+
+  .kp-caps { display: flex; flex-wrap: wrap; gap: 14px 26px; align-items: center; margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .kp.compact .kp-caps { display: none; }
+  .kp-cap { display: inline-flex; align-items: center; gap: 9px; font-family: var(--sans); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #334155; }
+  .kp-ic { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #eaf1fe; color: var(--b); }
+  .kp-ic :global(svg) { width: 16px; height: 16px; }
+
+  .kp-disc { font-family: var(--sans); color: #94a3b8; font-size: 0.78rem; margin: 18px 0 0; }
 </style>
