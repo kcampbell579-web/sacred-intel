@@ -57,6 +57,28 @@ const MAP = {
   'freeport-lng-self-reported-emission-events': 'infrastructure',
   'data-center-wastewater-backlash': 'infrastructure',
   'ai-data-centers-pfas-production-wave': 'infrastructure',
+  // November 2026 batch
+  'nextera-halts-bess-pfpra-interim-screening-level': 'environment',
+  '200-facilities-clean-air-act-exemptions': 'environment',
+  'joint-base-andrews-fuel-leak-stopped-still-flowing': 'environment',
+  'love-canal-exposure-pathway-no-relocation': 'environment',
+  'atrazine-mitigation-plan-99-percent-watersheds': 'environment',
+  '100-dollar-collar-sensor-order-of-magnitude': 'environment',
+  'sheyenne-nd-lead-five-samples-premise-plumbing': 'environment',
+  'toledo-glycidyl-methacrylate-vent-no-air-data': 'environment',
+  'east-hampton-pfpra-1000-days-no-biomonitoring': 'environment',
+  'ohio-court-air-nuisance-rule-community-data': 'environment',
+  'epa-rcra-50-common-sense-reform': 'environment',
+  'wisconsin-pfas-private-well-program-125m': 'environment',
+  '3m-pfas-personal-injury-settlement-7-35-billion': 'environment',
+  'air-force-academy-lead-swabs-false-positives': 'health',
+  'baby-teeth-non-targeted-autism-pilot': 'health',
+  'chicken-wraps-ecoli-proactive-removal-no-recall': 'health',
+  'richmond-schools-mold-humidity-not-monitored': 'health',
+  'cooked-rice-arsenic-sampling-matrix': 'health',
+  'two-trench-deaths-48-hours-reentry': 'safety',
+  'gripe-water-methanol-isopropanol-recall': 'safety',
+  'texas-data-centers-air-quality-2002-levels': 'infrastructure',
 };
 
 // Fallback: guess a section from topics/category if a slug isn't mapped.
