@@ -4,7 +4,7 @@ export const SITE = {
   tagline: 'The stories behind safety, science, engineering, and environmental health.',
   description:
     'Sacred Intel is a 20-minute podcast and content platform covering environmental health, workplace safety, engineering failures, disasters, emerging contaminants, and the science behind major headlines.',
-  email: 'hello@sacredintel.org',
+  email: 'kelly.sacredintel@gmail.com',
   // Newsletter (Mailjet). Every form posts to our own /api/subscribe
   // serverless function, which adds the address to a Mailjet contact list.
   // Set MJ_APIKEY_PUBLIC / MJ_APIKEY_PRIVATE (and optionally MAILJET_LIST_ID
