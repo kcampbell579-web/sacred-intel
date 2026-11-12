@@ -1,7 +1,7 @@
 ---
 title: "A watchdog proved chronic unpermitted pollution at a Texas LNG terminal using the plant\u2019s own reports. You can do this in New York."
 date: 2026-09-16
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Freeport LNG\u2019s emission events are recurring, not exceptional. The evidence is the facility\u2019s self-reported data, not an agency inspection. The technique is the story."
 topics: ["Air", "Industry"]

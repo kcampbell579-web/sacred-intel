@@ -1,7 +1,7 @@
 ---
 title: "38 People Sick From Chicken Wraps Nobody Will Name. “Proactively Removed,” so No Recall, No Store List, No Alert."
 date: 2026-10-09
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "FDA’s outbreak table says E. coli O157:H7, ready-to-eat multi-ingredient chicken wraps, shared with USDA. Neither agency has named the brand. Nine of fifteen active FDA investigations name no food at all."
 topics: ["Food Safety", "Transparency"]

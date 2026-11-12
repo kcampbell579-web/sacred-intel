@@ -1,7 +1,7 @@
 ---
 title: "The Base Said the Leak Was Stopped. The Creek Samples Say Jet Fuel Is Still Coming. Those Are Two Different Claims, and Only One of Them Was Tested."
 date: 2026-10-09
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Joint Base Andrews, Piscataway Creek. Maryland wants answers. The difference between “the release stopped” and “the contamination stopped moving” is the difference between a closure letter and a monitoring program."
 topics: ["Water", "Petroleum"]

@@ -1,7 +1,7 @@
 ---
 title: "288 Data Centers Could Put Texas Air Back Where It Was in 2002. The Exposure Pathway Is the Backup Generators."
 date: 2026-10-22
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "A Houston Advanced Research Center report: NOx up 35 percent by 2031, VOCs past 2002 levels, particulate back to 2006. Long Island is siting on the same logic."
 topics: ["Air", "Industry"]

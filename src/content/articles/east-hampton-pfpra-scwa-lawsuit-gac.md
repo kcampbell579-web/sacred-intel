@@ -1,7 +1,7 @@
 ---
 title: "UPDATE: East Hampton. The plume traveled 2,500 feet, SCWA is suing, and the standard carbon filter doesn\u2019t stop it."
 date: 2026-09-16
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "New details since our September 14 deep dive. Read that one first: \u201cThe fire they put out is the contamination.\u201d"
 topics: ["NY / Long Island", "PFAS", "Water", "Update"]

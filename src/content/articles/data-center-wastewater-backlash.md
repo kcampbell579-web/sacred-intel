@@ -1,7 +1,7 @@
 ---
 title: "Data center wastewater is a discharge category nobody has a playbook for. Long Island is about to need one."
 date: 2026-09-10
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Communities across the country are pushing back on what comes out of the cooling systems. Biocides, metals, treatment chemicals, and a lot of volume."
 topics: ["NY / Long Island", "Water"]

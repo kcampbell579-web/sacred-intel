@@ -1,7 +1,7 @@
 ---
 title: "It Took 1,000 Days to Find the PFAS in East Hampton’s Water. Not Because Nobody Looked. Because Nobody Could."
 date: 2026-10-22
-category: "Deep Dive"
+category: "Investigation"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "The county says its investigation is “mostly complete.” The state says there are “no plans” for a health study. The town keeps saying no to biomonitoring. And the detail that matters most: the water authority had no way to test for PFPrA until the plume had already reached the wellfield."
 topics: ["NY / Long Island", "PFAS", "Water"]

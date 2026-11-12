@@ -1,7 +1,7 @@
 ---
 title: "RCRA Turns 50 and EPA Marks It With a Deregulatory Package. The e-Manifest Change Is the One That Reaches Your Paperwork."
 date: 2026-10-22
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Electronic-only hazardous waste manifests, scrap tires as fuel, a mercury treatment variance, and 25-plus more actions on the way."
 topics: ["Waste", "Regulatory"]

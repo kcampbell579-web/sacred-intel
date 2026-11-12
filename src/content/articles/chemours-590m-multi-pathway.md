@@ -1,7 +1,7 @@
 ---
 title: "UPDATE: The Chemours number is $590 million, and the advocates\u2019 complaint is a sampling-scope complaint"
 date: 2026-09-16
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "The settlement is priced on drinking water. The exposure is in the soil, the gardens, the eggs, the honey, and the fish. Follow-on to our September 11 piece."
 topics: ["PFAS", "Legal", "Update"]

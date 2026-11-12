@@ -1,7 +1,7 @@
 ---
 title: "A toddler sensory toy got recalled for lead in the zipper. The notice doesn\u2019t say how much."
 date: 2026-09-10
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "About 1,835 Lontcs busy boards, sold on Amazon for around $31. Stop using it, get a refund. And notice what CPSC didn\u2019t publish."
 topics: ["Home", "Recall"]

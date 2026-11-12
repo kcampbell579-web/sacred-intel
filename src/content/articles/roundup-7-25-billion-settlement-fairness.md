@@ -1,7 +1,7 @@
 ---
 title: "$7.25 billion for Roundup claimants, and the product stays on the shelf"
 date: 2026-09-16
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "A federal judge is weighing whether the glyphosate settlement is fair. Awards from $10,000 to $165,000. Bayer keeps selling. The exposure question stays open, which means the documentation question does too."
 topics: ["Pesticides", "Legal"]

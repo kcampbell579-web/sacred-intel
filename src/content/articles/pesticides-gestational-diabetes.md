@@ -1,7 +1,7 @@
 ---
 title: "You don\u2019t have to spray it to be exposed to it"
 date: 2026-09-10
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "New research links living near pyrethroid and organophosphate applications to higher gestational diabetes risk. The exposure metric is proximity, not handling. That\u2019s the part worth paying attention to."
 topics: ["Exposure"]

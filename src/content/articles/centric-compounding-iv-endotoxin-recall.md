@@ -1,7 +1,7 @@
 ---
 title: "IV vitamin cocktails recalled nationwide for endotoxin. That\u2019s a cleanroom failure, not a bad ingredient."
 date: 2026-09-16
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Centric Compounding pulled glutathione, Myer\u2019s Cocktail, and Tri-Immune Boost injectables. Endotoxin survives sterilization when the bacteria don\u2019t. Here\u2019s what that tells you about the room they were made in."
 topics: ["Consumer", "Health"]

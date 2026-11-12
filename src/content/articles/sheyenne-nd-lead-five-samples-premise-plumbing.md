@@ -1,7 +1,7 @@
 ---
 title: "A Town Tested Five Taps. Two Were Over the Lead Limit. The Notice Says the Lead Is in Your Plumbing, Not Theirs. That’s the Utility Making the Case for Testing Your Own Tap."
 date: 2026-10-09
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Sheyenne, North Dakota. Two of five samples over 15 ppb. Concentrations not disclosed. “Not every property is affected.”"
 topics: ["Water", "Lead", "Home"]

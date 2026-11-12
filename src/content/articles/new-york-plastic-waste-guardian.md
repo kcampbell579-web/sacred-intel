@@ -1,7 +1,7 @@
 ---
 title: "Where New York\u2019s plastic actually goes"
 date: 2026-09-08
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "The Guardian built an interactive on the state\u2019s plastic waste stream. It\u2019s background, not a compliance item. Read it anyway, because on Long Island, disposal capacity is the whole ballgame."
 topics: ["NY / Long Island", "Worth Reading"]

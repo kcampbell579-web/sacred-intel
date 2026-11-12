@@ -96,7 +96,7 @@ export function sectionOf(entry) {
 }
 
 // "Investigations" = the longer analytical formats.
-const INVESTIGATION_CATS = new Set(['Deep Dive', 'Explainer', 'Field Guide']);
+const INVESTIGATION_CATS = new Set(['Investigation', 'Explainer', 'Field Guide']);
 export function isInvestigation(entry) {
   return INVESTIGATION_CATS.has(entry.data.category);
 }

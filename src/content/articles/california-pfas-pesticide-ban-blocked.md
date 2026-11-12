@@ -1,7 +1,7 @@
 ---
 title: "PFAS is an ingredient in some pesticides. On purpose. California tried to ban that and didn\u2019t."
 date: 2026-09-10
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "An Inside Climate News investigation traces the lobbying that stopped the bill. The exposure pathway it leaves open is one most consultants aren\u2019t tracking yet."
 topics: ["PFAS", "Regulatory"]

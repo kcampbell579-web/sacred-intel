@@ -1,7 +1,7 @@
 ---
 title: "What regulators assume lands on the field, and what actually lands on the property line"
 date: 2026-09-08
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "An advocacy group wants governors to ban drift-prone pesticides. Take the advocacy for what it is. The exposure-science point underneath it is solid."
 topics: ["Exposure"]

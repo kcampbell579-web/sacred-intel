@@ -1,7 +1,7 @@
 ---
 title: "The city measured asbestos in lower Manhattan and told people to wet-mop. 170,000 pages say so."
 date: 2026-09-10
-category: "Deep Dive"
+category: "Investigation"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "New York City released its internal post-9/11 air quality records. They show officials documenting asbestos in the dust while telling residents the air was safe. For anyone who does exposure work, this is the field\u2019s central cautionary tale, finally in primary sources."
 topics: ["NY / Long Island", "Industrial Hygiene"]

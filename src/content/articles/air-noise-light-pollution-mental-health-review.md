@@ -1,7 +1,7 @@
 ---
 title: "A review of 40 studies links air, noise, and light pollution to suicide risk. Here\u2019s what the evidence can and can\u2019t say."
 date: 2026-09-16
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Particulate and nitrogen dioxide exposure associated with elevated risk. The authors say it\u2019s correlational and probably reflects vulnerable environments. That caveat is the whole article."
 topics: ["Air", "Health", "Science"]

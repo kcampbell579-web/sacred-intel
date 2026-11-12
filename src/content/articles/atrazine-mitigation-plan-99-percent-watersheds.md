@@ -1,7 +1,7 @@
 ---
 title: "EPA’s Atrazine Plan Would Fix About 120 of 11,000 Contaminated Watersheds. A Mitigation Plan That Doesn’t Mitigate, With Numbers."
 date: 2026-10-09
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Center for Biological Diversity analysis in the Journal of Environmental Quality. Application rates cut 20 percent on paper. More than 90 percent of the acreage exempt or already compliant. The agency’s own harm threshold stays exceeded nearly everywhere."
 topics: ["Pesticides", "Water", "Regulatory"]

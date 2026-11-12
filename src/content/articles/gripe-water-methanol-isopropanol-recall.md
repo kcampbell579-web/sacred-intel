@@ -1,7 +1,7 @@
 ---
 title: "Methanol in Baby Gripe Water. The Ingredient List Is a Claim, Not a Measurement."
 date: 2026-10-09
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Pacific Health Sciences, one lot of Babies’ Magic Tea Baby Sleep Gripe Water, 4 oz. Undeclared ethanol, methanol, and isopropanol. For infants."
 topics: ["Children’s Health", "Recall"]

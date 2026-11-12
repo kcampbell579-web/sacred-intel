@@ -1,7 +1,7 @@
 ---
 title: "A $100 Air Sensor on a Deer Collar Read Ten Times Off the Nearest Official Monitor. The Deer Isn’t the Point. You Are."
 date: 2026-10-09
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Colorado State built an open-source PM2.5 logger for wildlife collars. First deployments on mule deer diverged from the regulatory station by an order of magnitude. The nearest monitor is not your exposure."
 topics: ["Air", "Methods", "Science"]

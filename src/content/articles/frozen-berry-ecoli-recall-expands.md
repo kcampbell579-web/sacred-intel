@@ -1,7 +1,7 @@
 ---
 title: "The berry recall got bigger. It usually does."
 date: 2026-09-08
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "E. coli O145:H28, frozen blueberries, and now Great Value Triple Berry Blend in 16 states. The first product named is almost never the last one."
 topics: ["Recall"]

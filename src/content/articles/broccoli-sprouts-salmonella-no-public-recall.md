@@ -1,7 +1,7 @@
 ---
 title: "22 sick from broccoli sprouts, and no public recall notice. That\u2019s a transparency failure, not a food safety success."
 date: 2026-09-10
-category: "Brief"
+category: "News"
 author: "Kelly McClure, CSP, ASP, CHST"
 description: "Salmonella Bovismorbificans across four western states, traced to one grower. The product got pulled. Nobody told the people who\u2019d already bought it."
 topics: ["Food Safety"]
