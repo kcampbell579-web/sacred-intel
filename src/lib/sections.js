@@ -78,6 +78,7 @@ const MAP = {
   'cooked-rice-arsenic-sampling-matrix': 'health',
   'two-trench-deaths-48-hours-reentry': 'safety',
   'gripe-water-methanol-isopropanol-recall': 'safety',
+  '3m-settlement-excavation-contractors-pfas-exposure-records': 'safety',
   'texas-data-centers-air-quality-2002-levels': 'infrastructure',
 };
 
