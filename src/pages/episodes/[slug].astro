@@ -5,6 +5,7 @@ import EpisodeArt from '../../components/EpisodeArt.astro';
 import EpisodeCard from '../../components/EpisodeCard.astro';
 import SeriesBadge from '../../components/SeriesBadge.astro';
 import SubscribeLinks from '../../components/SubscribeLinks.astro';
+import { titleCase } from '../../lib/format.js';
 
 export async function getStaticPaths() {
   const episodes = await getCollection('episodes', (e) => !e.data.draft);
@@ -16,6 +17,7 @@ export async function getStaticPaths() {
 
 const { ep, all } = Astro.props;
 const { data } = ep;
+const headline = titleCase(data.title);
 const { Content } = await ep.render();
 const date = data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
@@ -41,15 +43,15 @@ function ytEmbed(v) {
 }
 const embed = ytEmbed(data.video);
 ---
-<Base title={data.title} description={data.description} type="article" image={data.image || '/favicon.svg'}>
+<Base title={headline} description={data.description} type="article" image={data.image || '/favicon.svg'}>
   <section class="ep-hero">
     <div class="wrap ep-hero-inner">
-      <a href="/episodes/" class="backlink">← All episodes</a>
+      <a href="/episodes/" class="backlink">← All Episodes</a>
       <div style="display:flex;gap:10px;align-items:center;margin:16px 0 0;flex-wrap:wrap">
         <SeriesBadge series={data.series} />
         <span class="meta" style="color:var(--d-text-3)">Episode {String(data.number).padStart(2, '0')} · {date} · {data.duration}</span>
       </div>
-      <h1>{data.title}</h1>
+      <h1>{headline}</h1>
       <p class="desc">{data.description}</p>
       {data.guests.length > 0 && (
         <p class="meta" style="margin-top:16px">With {data.guests.join(', ')}</p>

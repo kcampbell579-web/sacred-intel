@@ -5,7 +5,7 @@ import ArticleCard from '../components/ArticleCard.astro';
 import Newsletter from '../components/Newsletter.astro';
 import { articleImage, episodeImage } from '../lib/images.js';
 import { sectionOf, sectionBySlug, isInvestigation, SECTIONS } from '../lib/sections.js';
-import { readingTime, fmtDate, fmtDateLong } from '../lib/format.js';
+import { readingTime, fmtDate, fmtDateLong, titleCase } from '../lib/format.js';
 import { seriesList } from '../lib/series.js';
 import KitPromo from '../components/KitPromo.astro';
 
@@ -47,7 +47,7 @@ const tools = [
       <div class="scrim"></div>
       <div class="fc">
         <span class="cat-label" style={`--dot:${leadIsInv ? 'var(--purple)' : leadSec.color}`}>{leadIsInv ? 'Investigation' : leadSec.name}</span>
-        <h1><a href={`/articles/${lead.slug}/`}>{lead.data.title}</a></h1>
+        <h1><a href={`/articles/${lead.slug}/`}>{titleCase(lead.data.title)}</a></h1>
         <p class="deck">{lead.data.description}</p>
         <div class="meta"><span>By {lead.data.author.split(',')[0]}</span><span class="sep">|</span><span>{fmtDate(lead.data.date)}</span><span class="sep">|</span><span>{readingTime(lead)} min read</span></div>
         <a href={`/articles/${lead.slug}/`} class="btn btn-primary btn-lg">{leadIsInv ? 'Read the investigation' : 'Read the story'} →</a>
@@ -63,7 +63,7 @@ const tools = [
             <li>
               <span class="rank">{i + 1}</span>
               <div>
-                <a class="rl" href={`/articles/${a.slug}/`}>{a.data.title}</a>
+                <a class="rl" href={`/articles/${a.slug}/`}>{titleCase(a.data.title)}</a>
                 <span class="rm">{s.name} · {readingTime(a)} min read</span>
               </div>
             </li>
@@ -141,7 +141,7 @@ const tools = [
               <a href={`/articles/${a.slug}/`} class:list={['thumb', { ph: !ph }]} style={`--dot:${s.color}`}>{ph && <img src={ph} alt={a.data.title} loading="lazy" />}</a>
               <div>
                 <span class="cat-label" style={`--dot:${s.color}`}>{s.name}</span>
-                <h3><a href={`/articles/${a.slug}/`}>{a.data.title}</a></h3>
+                <h3><a href={`/articles/${a.slug}/`}>{titleCase(a.data.title)}</a></h3>
                 <p>{a.data.description}</p>
                 <div class="meta"><span>{fmtDate(a.data.date)}</span><span class="sep">·</span><span>{readingTime(a)} min read</span></div>
               </div>
@@ -155,7 +155,7 @@ const tools = [
   <!-- Watch + Listen -->
   <section class="section section-surface">
     <div class="wrap">
-      <div class="rulehead"><h2>Watch + Listen</h2><a class="more" href="/watch/">All episodes →</a></div>
+      <div class="rulehead"><h2>Watch &amp; Listen</h2><a class="more" href="/watch/">All Episodes →</a></div>
       <div class="watch-grid">
         {featEp && (
           <div class="watch-lead">
@@ -164,7 +164,7 @@ const tools = [
               <span class="play"><span><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></span>
             </a>
             <span class="cat-label" style="--dot:var(--purple);margin-top:14px">Video &amp; Podcast</span>
-            <h3><a href={`/episodes/${featEp.slug}/`} style="color:var(--text)">{featEp.data.title}</a></h3>
+            <h3><a href={`/episodes/${featEp.slug}/`} style="color:var(--text)">{titleCase(featEp.data.title)}</a></h3>
             <p class="muted">{featEp.data.description}</p>
           </div>
         )}
@@ -172,7 +172,7 @@ const tools = [
           {sideEps.map((e) => (
             <a class="witem" href={`/episodes/${e.slug}/`}>
               <div class="wthumb">{episodeImage(e.slug) && <img src={episodeImage(e.slug)} alt={e.data.title} />}</div>
-              <div><span class="cat-label" style="--dot:var(--purple)">Watch · Listen</span><h4>{e.data.title}</h4></div>
+              <div><span class="cat-label" style="--dot:var(--purple)">Watch · Listen</span><h4>{titleCase(e.data.title)}</h4></div>
             </a>
           ))}
         </div>

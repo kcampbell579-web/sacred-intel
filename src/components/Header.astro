@@ -1,17 +1,26 @@
 ---
 import { getCollection } from 'astro:content';
 import { SECTIONS } from '../lib/sections.js';
+import { titleCase } from '../lib/format.js';
 
 const path = Astro.url.pathname;
 const on = (h) => (h === '/' ? path === '/' : path.startsWith(h));
 
+// Primary navigation — topics + the standard sections, Title Case throughout.
 const NAV = [
-  { label: 'News', href: '/latest/' },
+  { label: 'Latest', href: '/latest/' },
   ...SECTIONS.map((s) => ({ label: s.name, href: `/section/${s.slug}/` })),
   { label: 'Investigations', href: '/investigations/' },
   { label: 'Data & Tools', href: '/data/' },
-  { label: 'Watch', href: '/watch/' },
+  { label: 'Watch & Listen', href: '/watch/' },
+];
+
+// Secondary links live in the footer and the mobile "More" group.
+const SECONDARY = [
   { label: 'About', href: '/about/' },
+  { label: 'Editorial Standards', href: '/standards/' },
+  { label: 'Contact', href: '/contact/' },
+  { label: 'Submit a Tip', href: '/contact/' },
 ];
 
 const ticker = (await getCollection('articles', (a) => !a.data.draft))
@@ -47,7 +56,7 @@ const ticker = (await getCollection('articles', (a) => !a.data.draft))
       {ticker.map((a, i) => (
         <>
           {i > 0 && <span class="sep">|</span>}
-          <a href={`/articles/${a.slug}/`}>{a.data.title}</a>
+          <a href={`/articles/${a.slug}/`}>{titleCase(a.data.title)}</a>
         </>
       ))}
     </div>
@@ -68,9 +77,8 @@ const ticker = (await getCollection('articles', (a) => !a.data.draft))
   </form>
   {NAV.map((n) => <a href={n.href} data-close>{n.label}</a>)}
   <div class="grp">More</div>
-  <a href="/episodes/" data-close>Podcast</a>
-  <a href="/contact/" data-close>Contact</a>
-  <a href="/standards/" data-close>Editorial Standards</a>
+  <a href="/subscribe/" data-close>Subscribe</a>
+  {SECONDARY.map((n) => <a href={n.href} data-close>{n.label}</a>)}
 </div>
 
 <!-- Search overlay -->

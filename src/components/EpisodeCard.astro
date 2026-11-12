@@ -1,10 +1,12 @@
 ---
 import EpisodeArt from './EpisodeArt.astro';
 import SeriesBadge from './SeriesBadge.astro';
+import { titleCase } from '../lib/format.js';
 const { episode } = Astro.props;
 const { data, slug } = episode;
 const date = data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 const topicAttr = data.topics.join('|').toLowerCase();
+const headline = titleCase(data.title);
 ---
 <article
   class="ep-card"
@@ -14,12 +16,12 @@ const topicAttr = data.topics.join('|').toLowerCase();
   data-title={data.title.toLowerCase()}
   data-desc={data.description.toLowerCase()}
 >
-  <a href={`/episodes/${slug}/`} aria-label={data.title}>
+  <a href={`/episodes/${slug}/`} aria-label={headline}>
     <EpisodeArt number={data.number} title={data.title} series={data.series} image={data.image} showPlay={true} />
   </a>
   <div class="card-body">
     <SeriesBadge series={data.series} />
-    <h3><a href={`/episodes/${slug}/`}>{data.title}</a></h3>
+    <h3><a href={`/episodes/${slug}/`}>{headline}</a></h3>
     <p>{data.description}</p>
     <div class="card-foot meta">
       <span>Ep {String(data.number).padStart(2, '0')}</span>

@@ -1,21 +1,22 @@
 ---
 import { articleImage } from '../lib/images.js';
 import { sectionOf, sectionBySlug } from '../lib/sections.js';
-import { readingTime, fmtDate } from '../lib/format.js';
+import { readingTime, fmtDate, titleCase } from '../lib/format.js';
 const { article } = Astro.props;
 const { data, slug } = article;
 const photo = data.image || articleImage(slug);
 const sec = sectionBySlug[sectionOf(article)];
 const rt = readingTime(article);
 const author = data.author.split(',')[0];
+const headline = titleCase(data.title);
 ---
 <article class="card" data-article data-section={sec.slug} data-cat={data.category.toLowerCase()} data-title={data.title.toLowerCase()} data-topics={data.topics.join('|').toLowerCase()}>
-  <a class:list={['cover', { ph: !photo }]} href={`/articles/${slug}/`} style={`--dot:${sec.color}`} aria-label={data.title}>
-    {photo && <img src={photo} alt={data.title} loading="lazy" />}
+  <a class:list={['cover', { ph: !photo }]} href={`/articles/${slug}/`} style={`--dot:${sec.color}`} aria-label={headline}>
+    {photo && <img src={photo} alt={headline} loading="lazy" />}
   </a>
   <div class="cbody">
     <a href={`/section/${sec.slug}/`}><span class="cat-label" style={`--dot:${sec.color}`}>{sec.name}</span></a>
-    <h3><a href={`/articles/${slug}/`}>{data.title}</a></h3>
+    <h3><a href={`/articles/${slug}/`}>{headline}</a></h3>
     <p>{data.description}</p>
     <div class="cfoot meta">
       <span>{author}</span><span class="sep">·</span><span>{fmtDate(data.date)}</span><span class="sep">·</span><span>{rt} min read</span>

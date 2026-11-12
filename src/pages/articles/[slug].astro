@@ -5,7 +5,7 @@ import ArticleCard from '../../components/ArticleCard.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import { articleImage } from '../../lib/images.js';
 import { sectionOf, sectionBySlug } from '../../lib/sections.js';
-import { readingTime, fmtDateLong, iso } from '../../lib/format.js';
+import { readingTime, fmtDateLong, iso, titleCase } from '../../lib/format.js';
 import KitPromo from '../../components/KitPromo.astro';
 
 export async function getStaticPaths() {
@@ -15,6 +15,7 @@ export async function getStaticPaths() {
 
 const { art, all } = Astro.props;
 const { data } = art;
+const headline = titleCase(data.title);
 const { Content } = await art.render();
 const sec = sectionBySlug[sectionOf(art)];
 const photo = data.image || articleImage(art.slug);
@@ -31,7 +32,7 @@ const related = all
 const jsonld = {
   '@context': 'https://schema.org',
   '@type': 'NewsArticle',
-  headline: data.title,
+  headline: headline,
   description: data.description,
   datePublished: iso(data.date),
   dateModified: iso(data.date),
@@ -42,12 +43,12 @@ const jsonld = {
   mainEntityOfPage: new URL(`/articles/${art.slug}/`, Astro.site).toString(),
 };
 ---
-<Base title={data.title} description={data.description} type="article" image={photo || '/og-default.jpg'} jsonld={jsonld}>
+<Base title={headline} description={data.description} type="article" image={photo || '/og-default.jpg'} jsonld={jsonld}>
   <article>
     <div class="article-head">
       <div class="article-head-inner">
         <a href={`/section/${sec.slug}/`}><span class="cat-label" style={`--dot:${sec.color}`}>{sec.name}</span></a>
-        <h1>{data.title}</h1>
+        <h1>{headline}</h1>
         <p class="deck">{data.description}</p>
         <div class="byline">
           <span class="avatar">{initials}</span>
@@ -61,7 +62,7 @@ const jsonld = {
 
     {photo && (
       <div class="article-hero-img">
-        <img src={photo} alt={data.title} />
+        <img src={photo} alt={headline} />
       </div>
     )}
 
